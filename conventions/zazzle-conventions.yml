@@ -1,0 +1,135 @@
+generated: '2026-08-05'
+method: searched
+source: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+also_derived_from:
+- openapi/zazzle-create-a-product-openapi.yml
+- openapi/zazzle-realview-openapi.yml
+- openapi/zazzle-vendor-openapi.yml
+summary: >-
+  Zazzle's three public API surfaces predate REST-as-default and share almost no cross-cutting
+  convention with each other. The Create-a-Product and RealView surfaces are GET-only URL contracts
+  with a dynamically-named query grammar and HTML/image responses; the Vendor API is an XML RPC
+  endpoint with an operation selector. There is no JSON anywhere, no idempotency contract, no
+  pagination, no request-id header, and no documented rate-limit signalling.
+style:
+  create_a_product:
+    protocol: HTTP GET, query-string only
+    media_type: text/html (rendered product page)
+    verbs: [GET]
+  realview:
+    protocol: HTTP GET, query-string only
+    media_type: image/png, image/jpeg
+    verbs: [GET]
+  vendor:
+    protocol: HTTP GET, RPC-over-query-string
+    media_type: text/xml
+    verbs: [GET]
+    operation_selector: method
+authentication:
+  see: authentication/zazzle-authentication.yml
+  create_a_product: URL-borne member account ID (`at`) plus optional associate ID (`rf`); origin allowlist enforced out of band
+  vendor: vendorid + per-call MD5 hash signature, both in the query string
+naming:
+  dynamic_parameters: true
+  description: >-
+    The most distinctive convention in Zazzle's API grammar: template object parameters are named
+    after the "URL Parameter Name" the partner assigns to each object in Zazzle's design tool. There
+    is no fixed parameter list. Defaults increment — image1, image2, text1, text2 — producing
+    t_image1_iid, t_text1_txt, t_text1_txtclr; renaming an object to `photo` renames the parameter to
+    t_photo_iid.
+  suffix_grammar:
+  - suffix: _iid
+    surface: create-a-product
+    meaning: image URL for an image template object
+  - suffix: _url
+    surface: realview
+    meaning: image URL for an image template object (deliberately different from _iid)
+  - suffix: _txt
+    surface: both
+    meaning: text value for a text template object
+  - suffix: _txtclr
+    surface: both
+    meaning: 6-digit hex color for a text template object
+  gotcha: >-
+    The image parameter suffix differs between the two surfaces that otherwise share a grammar —
+    t_image1_iid on Create-a-Product versus t_image1_url on RealView. Zazzle's own troubleshooting
+    table lists this as a top support issue.
+encoding:
+  required: true
+  scheme: percent-encoding
+  applies_to: [image URLs, text values, continueUrl]
+  note: >-
+    All image URLs and text passed through any surface must be URL-encoded. An unencoded image URL is
+    a documented cause of "Zazzle API Error: Image failed to upload".
+case_sensitivity:
+  parameters_case_sensitive: true
+  documented_example: >-
+    `continueUrl` must be spelled with that exact casing; wrong case is a documented failure mode.
+  observed: >-
+    The Vendor API accepts the `method` value case-insensitively — probes of both `getshippinglabel`
+    and `GetShippingLabel` advanced identically to the next parameter check on 2026-08-05.
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    No idempotency key, no request deduplication, and no retry-safety contract is documented on any
+    Zazzle surface. All three surfaces are GET-only, so the read-shaped calls are naturally safe to
+    repeat, but the two state-changing Vendor methods that matter — `getshippinglabel` (which BUYS a
+    carrier label) and `ackorder` — are also GETs with no idempotency key. A retried
+    `getshippinglabel` has no documented deduplication behaviour. This is the single largest
+    agent-safety gap in Zazzle's API surface.
+pagination:
+  supported: false
+  note: >-
+    `listneworders` and `listcancelledorders` take no page/cursor/limit parameter. `getpackingsheet`
+    takes a `page` parameter, but that selects a page of the printed packing sheet document, not a
+    page of an API result set.
+filtering:
+  supported: false
+field_expansion:
+  supported: false
+metadata:
+  supported: partial
+  fields:
+  - name: tc
+    surface: create-a-product
+    meaning: partner-defined tracking code, up to 100 alphanumeric/underscore characters; surfaces in referral history
+  - name: ic
+    surface: create-a-product
+    meaning: partner-defined image code, up to 100 alphanumeric/underscore characters; surfaces in royalty history
+  note: >-
+    Zazzle has no generic metadata bag, but `tc` and `ic` are genuine partner-controlled annotation
+    channels that flow through to the partner's own earnings reporting.
+request_tracing:
+  request_id_header: null
+  correlation: >-
+    None. Zazzle's error text instructs the caller to quote a symbolic reference string
+    (e.g. `Invalid_ Parameter_Name`) to maker.management@zazzle.com rather than a per-request ID.
+versioning:
+  see: lifecycle/zazzle-lifecycle.yml
+  create_a_product: document-versioned only (User Guide v3.0, 9/2019); no version in the URL
+  realview: unversioned path (/svc/view)
+  vendor: URI-path version segment (/v100/)
+error_envelope:
+  see: errors/zazzle-problem-types.yml
+  create_a_product: in-page HTML error text, no structured body
+  vendor: XML <Response><Status><Code>OK|ERROR</Code><Info>…</Info></Status></Response>, always HTTP 200
+  rfc9457: false
+rate_limiting:
+  documented: false
+  headers: null
+  note: No rate limits, quotas, or RateLimit-* / Retry-After headers are documented or observed.
+webhooks:
+  supported: false
+  note: >-
+    There is no event or webhook surface. Vendor order intake is poll-based: Makers call
+    `listneworders` on their own schedule. This is why no AsyncAPI artifact exists in this repo — the
+    absence is real, not an unharvested gap.
+x-evidence:
+- url: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+  http_status: 200
+  fetched: '2026-08-05'
+- url: https://vendor.zazzle.com/v100/api.aspx?method=GetShippingLabel
+  http_status: 200
+  fetched: '2026-08-05'
+  note: case-insensitivity observation

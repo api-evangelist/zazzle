@@ -1,0 +1,102 @@
+generated: '2026-08-05'
+method: probed
+source: live GET probes of every host in apis.yml and every OpenAPI servers[] host
+fetched: '2026-08-05'
+note: >-
+  Every host was probed with a deliberate CONTROL path (/.well-known/CONTROL-does-not-exist.json)
+  alongside the real paths, so a catch-all that answers 200 for everything is recorded as a catch-all
+  and never credited as a hit. www.zazzle.com blocks unattended clients with 403 (Akamai-style bot
+  challenge); its results below were obtained with a browser-equivalent fetch and are marked with the
+  method used.
+hosts:
+- host: https://www.zazzle.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/html
+    machine_readable: false
+    file: null
+    file_note: >-
+      Not saved verbatim: the host 403s unattended clients, so the body was only readable through a
+      browser-equivalent fetch that returns converted markdown rather than the raw bytes. Recording a
+      converted body as a verbatim artifact would misrepresent it. Content is summarized in
+      security/zazzle-vulnerability-disclosure.yml instead.
+    note: >-
+      A real, distinct security/vulnerability-disclosure page is served at the RFC 9116 path, but as
+      HTML — it is NOT an RFC 9116 machine-readable security.txt. Confirmed distinct from the SPA
+      catch-all: /llms.txt at the same host returns a hard 404 and /.well-known/agent-card.json
+      returns the marketing homepage, while this path returns unique security-policy content.
+  - path: /llms.txt
+    status: 404
+    note: control probe — proves the host does not blanket-200
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: text/html
+    hit: false
+    note: SPA catch-all returning the Zazzle homepage; rejected, not an agent card
+  - path: /.well-known/openid-configuration
+    status: not-probed
+    note: >-
+      Not probed as a hit — the host's catch-all returns 200 HTML for arbitrary /.well-known paths,
+      so a 200 here would carry no information. Zazzle publishes no OIDC surface.
+- host: https://api.zazzle.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/CONTROL-does-not-exist.json
+    status: 404
+    note: control probe — host returns honest 404s
+- host: https://vendor.zazzle.com
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: text/html
+    hit: false
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: text/html
+    hit: false
+  - path: /.well-known/CONTROL-does-not-exist.json
+    status: 200
+    content_type: text/html
+    note: >-
+      CONTROL PROVES CATCH-ALL. Every /.well-known/* path on this host returns the same 159-byte
+      ASP.NET "An error occurred while processing your request." HTML page. No document on this host
+      is credited.
+- host: https://rlv.zazzle.com
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 406
+  - path: /.well-known/agent.json
+    status: 406
+  - path: /.well-known/CONTROL-does-not-exist.json
+    status: 406
+    note: control probe — host refuses all unnegotiated requests
+- host: https://asset.zcache.com
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/CONTROL-does-not-exist.json
+    status: 404
+summary:
+  rfc9116_security_txt: false
+  security_disclosure_page: true
+  openid_configuration: false
+  oauth_authorization_server: false
+  api_catalog: false
+  ai_plugin: false
+  agent_card: false

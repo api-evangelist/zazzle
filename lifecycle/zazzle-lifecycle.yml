@@ -1,0 +1,93 @@
+generated: '2026-08-05'
+method: searched
+source: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+summary: >-
+  Zazzle publishes no API versioning policy, no deprecation policy, no SLA, no status page and no
+  changelog. Version information exists only as a document revision on the Create-a-Product guide and
+  as a frozen path segment on the Vendor API. The Create-a-Product API's current published guide is
+  v3.0, dated September 2019 — the newest first-party API documentation API Evangelist could locate
+  for any Zazzle surface.
+versioning:
+  policy_published: false
+  by_surface:
+  - api: zazzle:create-a-product
+    scheme: document-revision-only
+    current: 'User Guide v3.0'
+    dated: '2019-09'
+    in_url: false
+    prior_versions:
+    - version: 'v2'
+      dated: '2018-06'
+      url: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v2.pdf
+      http_status: 200
+    note: >-
+      Both the v2 (6/2018) and v3 (9/2019) guides remain live at stable CDN URLs, so a caller can
+      diff revisions — but the API URL itself is unversioned, meaning a change to the contract would
+      apply to every existing linkover at once.
+  - api: zazzle:realview
+    scheme: unversioned
+    current: null
+    in_url: false
+    note: /svc/view carries no version segment.
+  - api: zazzle:vendor
+    scheme: uri-path
+    current: v100
+    in_url: true
+    note: >-
+      The single-segment `/v100/` has been in place across every public third-party Maker integration
+      API Evangelist located. No v101 or later path was found.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    No deprecation policy, no Sunset or Deprecation response headers, and no advance-notice
+    commitment for any surface. Because the Create-a-Product URL is unversioned and lives in
+    partners' published HTML indefinitely, a breaking change would land without a migration path.
+  deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page:
+  url: null
+  published: false
+  probes:
+  - url: https://status.zazzle.com/
+    result: DNS does not resolve
+    fetched: '2026-08-05'
+  - url: https://zazzle.statuspage.io/
+    http_status: 302
+    redirect_to: https://www.statuspage.io/
+    fetched: '2026-08-05'
+    note: >-
+      Redirects to the Statuspage marketing site, i.e. no Zazzle-tenanted status page exists. This is
+      the classic soft-hit — a 302 that looks like a page and is not one.
+  note: >-
+    No status page was found on any probed host. No StatusPage pointer is emitted in apis.yml; a
+    pointer here would be false credit.
+changelog:
+  url: null
+  published: false
+  note: >-
+    No dated API changelog was located for any surface. Zazzle's Community forum
+    (https://community.zazzle.com/) carries product announcements but is not an API changelog. No
+    ChangeLog pointer is emitted.
+support:
+  create_a_product: api.help@zazzle.com
+  vendor: maker.management@zazzle.com
+  help_center: https://help.zazzle.com/hc/en-us/sections/360005063194-Create-A-Product-API
+  maker_manual: https://makerhelp.zazzle.com/hc/en-us
+  community: https://community.zazzle.com/
+x-evidence:
+- url: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+  http_status: 200
+  fetched: '2026-08-05'
+- url: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v2.pdf
+  http_status: 200
+  fetched: '2026-08-05'
+- url: https://zazzle.statuspage.io/
+  http_status: 302
+  fetched: '2026-08-05'

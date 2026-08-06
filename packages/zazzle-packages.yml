@@ -1,0 +1,59 @@
+generated: '2026-08-05'
+method: searched
+source: registry searches on npm, PyPI, RubyGems, Packagist, plus the Zazzle developer pages
+summary: >-
+  Zazzle ships no first-party client library in any language, and none of its developer pages link to
+  one. The Create-a-Product and RealView surfaces are URL contracts that need no SDK; the Vendor API
+  is partner-gated and its integrations are hand-rolled. This is an honest empty result, not an
+  unsearched one — the registry probes are recorded below.
+packages: []
+official_sdk_count: 0
+registries_searched:
+- registry: npm
+  query: zazzle
+  url: https://registry.npmjs.org/-/v1/search?text=zazzle
+  http_status: 200
+  first_party_hits: 0
+  note: >-
+    Only third-party scrapers and unrelated packages (@tomerch/zazzle-crawler, get-product-name).
+    No @zazzle scope is published.
+- registry: pypi
+  query: zazzle
+  url: https://pypi.org/pypi/zazzle/json
+  http_status: 200
+  first_party_hits: 0
+  note: >-
+    The PyPI project named "Zazzle" is an unrelated logging library by BitNinja01
+    (https://github.com/BitNinja01/Zazzle), not a Zazzle Inc. client. `python-zazzle` and
+    `zazzle-api` both 404.
+- registry: rubygems
+  query: zazzle
+  url: https://rubygems.org/api/v1/search.json?query=zazzle
+  http_status: 200
+  first_party_hits: 0
+- registry: packagist
+  query: zazzle
+  url: https://packagist.org/search.json?q=zazzle
+  http_status: 200
+  first_party_hits: 0
+  note: Third-party only (dgmon/zazzlecore, dgmon/zazzlepatches).
+- registry: github
+  query: github.com/zazzle
+  url: https://api.github.com/orgs/zazzle/repos
+  http_status: 200
+  first_party_hits: 0
+  note: >-
+    The zazzle GitHub organization exists but publishes exactly one repository —
+    zazzle/UIZE-JavaScript-Framework, a general-purpose JS framework, not an API client. No SDK, no
+    OpenAPI, no .proto, no example integrations.
+third_party_integrations:
+- name: Order Desk
+  kind: order management integration
+  url: https://www.orderdesk.com/integrations/zazzle/
+  official: false
+  note: Commercial third-party bridge to the Zazzle Maker order surface.
+gaps:
+- No official SDK in any language, so no SDKs pointer is emitted in apis.yml.
+- No CLI, so no cli/ artifact exists.
+- No public Postman collection or workspace was found, so no Postman pointer is emitted.
+- The one first-party GitHub repo is unrelated to the API program.

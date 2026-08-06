@@ -1,0 +1,150 @@
+generated: '2026-08-05'
+method: derived
+source: >-
+  openapi/zazzle-create-a-product-openapi.yml, openapi/zazzle-realview-openapi.yml,
+  openapi/zazzle-vendor-openapi.yml, https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+summary: >-
+  Derived from the identifier graph Zazzle's own API parameters expose. Zazzle publishes no schema
+  document, so entity ATTRIBUTES below are limited to identifiers and fields that appear in the
+  documented parameter tables or in probed responses. Vendor API response payload shapes are
+  deliberately NOT modelled — Zazzle does not publish them and API Evangelist holds no authenticated
+  sample, so guessing them would be fabrication.
+identifiers:
+  format: 18-digit numeric
+  note: >-
+    Every first-class Zazzle entity in the public API grammar is keyed by an 18-digit number, with no
+    type prefix. Account, associate, store, category and product IDs are indistinguishable from each
+    other by shape — a caller cannot tell from an ID alone what kind of thing it names. This is the
+    inverse of the prefixed-ID convention (cus_, inv_) most modern APIs adopted.
+entities:
+- name: MemberAccount
+  id_parameter: at
+  domain: identity
+  surfaces: [zazzle:create-a-product, zazzle:realview]
+  description: The Zazzle account a generated product and its royalties are attributed to.
+- name: Associate
+  id_parameter: rf
+  domain: affiliate
+  surfaces: [zazzle:create-a-product]
+  description: Referral identity under the Zazzle Associates/Ambassador program.
+- name: Store
+  id_parameter: sr
+  domain: catalog
+  surfaces: [zazzle:create-a-product]
+  description: A seller storefront within Zazzle, holding products and categories.
+- name: StoreCategory
+  id_parameter: cg
+  domain: catalog
+  surfaces: [zazzle:create-a-product]
+  description: >-
+    A grouping of products within a store. Required for the Templates Buffet flow; the default
+    "New Products" category is explicitly excluded.
+- name: TemplateProduct
+  id_parameter: pd (create-a-product) / pid (realview)
+  domain: catalog
+  surfaces: [zazzle:create-a-product, zazzle:realview]
+  description: >-
+    A Zazzle product posted for sale with `Make product a template = Yes`, whose design carries one
+    or more template objects. Immutable once posted for sale — the guide states templates cannot be
+    edited after posting; changing a design requires creating a new product and deleting the old one.
+- name: TemplateObject
+  id_parameter: none (named, not keyed)
+  domain: catalog
+  surfaces: [zazzle:create-a-product, zazzle:realview]
+  description: >-
+    A named placeholder within a template. Carries a Product Page Label, a URL Parameter Name (which
+    becomes the API parameter name), an inner fit/fill mode for images, and an allow-editing flag.
+  kinds: [image, text]
+  attributes:
+  - product_page_label
+  - url_parameter_name
+  - inner_fit_fill_mode
+  - allow_editing_on_product_page
+- name: GeneratedProduct
+  id_parameter: none
+  domain: catalog
+  surfaces: [zazzle:create-a-product]
+  description: >-
+    The purchasable product produced by a linkover. Not addressable by ID through the API — it exists
+    as the rendered destination of the link.
+- name: Order
+  id_parameter: orderid
+  domain: fulfillment
+  surfaces: [zazzle:vendor]
+  description: >-
+    A Zazzle order assigned to a Maker for manufacture. Retrieved singly by `getorder` and in batch
+    by `listneworders` / `listcancelledorders`.
+- name: PackingSheet
+  id_parameter: orderid + page
+  domain: fulfillment
+  surfaces: [zazzle:vendor]
+  description: Printable packing document for an order, retrieved a page at a time.
+- name: ShippingLabel
+  id_parameter: orderid (create) / tracking (void)
+  domain: fulfillment
+  surfaces: [zazzle:vendor]
+  description: >-
+    Carrier label purchased for an order via `getshippinglabel` (parameterized by weight and document
+    format) and voidable via `voidshippinglabel` by tracking number.
+relationships:
+- from: MemberAccount
+  to: Store
+  type: has_many
+  via: at -> sr
+  confidence: high
+- from: Store
+  to: StoreCategory
+  type: has_many
+  via: sr -> cg
+  confidence: high
+- from: StoreCategory
+  to: TemplateProduct
+  type: has_many
+  via: cg -> pd
+  confidence: high
+  note: The relationship the ax=DesignBlast (Templates Buffet) flow traverses.
+- from: TemplateProduct
+  to: TemplateObject
+  type: has_many
+  via: named t_<object>_* parameters
+  confidence: high
+- from: TemplateProduct
+  to: GeneratedProduct
+  type: has_many
+  via: pd + template object values
+  confidence: high
+- from: MemberAccount
+  to: Associate
+  type: has_one
+  via: at -> rf
+  confidence: medium
+  note: >-
+    Zazzle documents `at` and `rf` as distinct 18-digit IDs and its own example link uses the SAME
+    value for both, so the exact cardinality between account and associate identity is not stated.
+- from: Order
+  to: PackingSheet
+  type: has_many
+  via: orderid + page
+  confidence: high
+- from: Order
+  to: ShippingLabel
+  type: has_one
+  via: orderid
+  confidence: high
+- from: ShippingLabel
+  to: Order
+  type: belongs_to
+  via: tracking
+  confidence: medium
+  note: >-
+    `voidshippinglabel` is keyed by tracking number rather than order id, implying tracking is
+    globally unique across labels.
+cross_surface_note: >-
+  The Create-a-Product/RealView entity graph (accounts, stores, categories, templates) and the Vendor
+  entity graph (orders, packing sheets, labels) share NO identifier. There is no public API path from
+  a generated product to the order it produced, or from an order back to the template that made it —
+  the design side and the fulfillment side of Zazzle are two disconnected public graphs.
+not_modelled:
+- Vendor API response payload schemas (Order line items, addresses, print files, previews) — Zazzle
+  does not publish them and no authenticated sample is held.
+- Product catalog taxonomy (the 350+ product types) — no public API exposes it.

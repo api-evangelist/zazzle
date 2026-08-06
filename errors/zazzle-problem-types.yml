@@ -1,0 +1,117 @@
+generated: '2026-08-05'
+method: probed
+source: https://vendor.zazzle.com/v100/api.aspx
+also_from:
+- https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+format: vendor-xml
+rfc9457: false
+summary: >-
+  Zazzle publishes no error-code registry and does not use RFC 9457 problem+json on any surface. Two
+  distinct error models exist, both captured here from primary evidence: the Vendor API's XML status
+  envelope (probed live, anonymously) and the Create-a-Product API's in-page HTML error text (from
+  the provider's own troubleshooting table).
+envelopes:
+- surface: zazzle:vendor
+  media_type: text/xml
+  http_status_on_error: 200
+  shape: |
+    <?xml version="1.0" encoding="utf-8"?>
+    <Response>
+      <Status>
+        <Code>ERROR</Code>
+        <Info>human-readable message ... reference <SymbolicCode></Info>
+      </Status>
+    </Response>
+  fields:
+    code_field: Response/Status/Code
+    code_values: [OK, ERROR]
+    message_field: Response/Status/Info
+    symbolic_reference: >-
+      The Info text ends with "reference <Symbol>" (e.g. `Invalid_ Parameter_Name`), a support
+      keyword to quote to maker.management@zazzle.com. It is not a stable machine-readable code
+      field — it is embedded in prose.
+  http_semantics_note: >-
+    IMPORTANT for any client or agent: the Vendor API returns HTTP 200 for errors. Status must be
+    read from the XML body, never from the HTTP status line. A client that branches on
+    `response.ok` will treat every failure as a success.
+- surface: zazzle:create-a-product
+  media_type: text/html
+  shape: in-page error text rendered on the Zazzle product page
+  fields: {}
+  http_semantics_note: >-
+    No structured error body at all. Failures surface as human-readable text on the rendered page.
+problems:
+- id: invalid-parameter-name
+  surface: zazzle:vendor
+  code: ERROR
+  symbolic_reference: Invalid_ Parameter_Name
+  title: Invalid parameter '<name>'
+  detail: >-
+    "Invalid parameter '<name>'. Is there an error in the parameter name? Recheck and attempt again.
+    If problem persists contact maker.management@zazzle.com and reference Invalid_ Parameter_Name"
+  meaning: >-
+    The named query parameter is missing, malformed, or carries a value the server will not accept.
+    The validator reports one parameter at a time, in a fixed order, so callers see the FIRST
+    unsatisfied parameter only.
+  remediation: >-
+    Supply the named parameter. Note that an unrecognised `method` value is also reported as
+    "Invalid parameter 'method'" rather than as an unknown-method error — an unimplemented operation
+    and a typo are indistinguishable from the response.
+  observed:
+    url: https://vendor.zazzle.com/v100/api.aspx?method=listneworders
+    http_status: 200
+    fetched: '2026-08-05'
+  source_operation: openapi/zazzle-vendor-openapi.yml#callVendorApiMethod
+- id: image-failed-to-upload
+  surface: zazzle:create-a-product
+  title: 'Zazzle API Error: Image failed to upload'
+  meaning: The image passed into a template image object could not be ingested.
+  causes:
+  - The domain hosting the image URL has not been declared on the partner's Zazzle associate account.
+  - The image URL was not percent-encoded.
+  - The `continueUrl` parameter was supplied with the wrong casing.
+  remediation: >-
+    Declare the image host domain at https://www.zazzle.com/my/associate/domains, percent-encode the
+    image URL, and spell `continueUrl` exactly.
+  source: provider troubleshooting table, API User Guide v3.0
+  source_operation: openapi/zazzle-create-a-product-openapi.yml#createProductFromTemplate
+- id: realview-object-not-changing
+  surface: zazzle:realview
+  title: RealView image object is not changing
+  meaning: The supplied image is ignored and the template placeholder renders instead.
+  causes:
+  - Wrong parameter suffix — RealView uses `t_image1_url`, not the Create-a-Product `t_image1_iid`.
+  remediation: Use the `_url` suffix on the RealView surface.
+  source: provider troubleshooting table, API User Guide v3.0
+  source_operation: openapi/zazzle-realview-openapi.yml#getRealViewProductImage
+- id: templates-buffet-placeholder-empty
+  surface: zazzle:create-a-product
+  title: Placeholder box in Templates Buffet link builder is empty
+  meaning: No template objects are offered for the selected store category.
+  causes:
+  - The category contains no templates.
+  - A newly created category/template has not propagated yet (up to 24 hours).
+  - The default "New Products" category was selected, which cannot be used for Templates Buffet.
+  remediation: >-
+    Assign templates to a purpose-made category, wait up to 24 hours for propagation, and never use
+    the default New Products category.
+  source: provider troubleshooting table, API User Guide v3.0
+  source_operation: openapi/zazzle-create-a-product-openapi.yml#createProductFromTemplate
+- id: not-acceptable
+  surface: zazzle:realview
+  http_status: 406
+  title: Not Acceptable
+  meaning: >-
+    Returned for an unparameterized or unnegotiated request to the RealView host. Observed by API
+    Evangelist for a bare GET of https://rlv.zazzle.com/svc/view.
+  observed:
+    url: https://rlv.zazzle.com/svc/view
+    http_status: 406
+    fetched: '2026-08-05'
+  source_operation: openapi/zazzle-realview-openapi.yml#getRealViewProductImage
+gaps:
+- No published error-code registry for any surface.
+- No RFC 9457 problem+json, and no JSON error body of any kind.
+- Vendor API returns HTTP 200 on error, defeating standard HTTP-level error handling.
+- Symbolic references are embedded in prose rather than exposed as a code field.
+- Only the first failing parameter is reported per call, forcing serial trial-and-error.

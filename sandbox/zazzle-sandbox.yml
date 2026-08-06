@@ -1,0 +1,84 @@
+generated: '2026-08-05'
+method: searched
+source: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+summary: >-
+  Zazzle operates no sandbox, no test mode, and no test/live key separation. What it does publish —
+  and what is captured verbatim below — is a live, public reference store with real template product
+  IDs and fully-formed working example linkovers, which a developer can call before owning any Zazzle
+  account of their own. Every value here is transcribed verbatim from Zazzle's published API guide;
+  none was invented.
+test_mode:
+  separate_environment: false
+  key_prefixes: null
+  test_clock: false
+  fixtures: false
+  note: >-
+    There is no zazzle sandbox host, no test-mode credential, and no way to exercise the
+    Create-a-Product flow without producing a genuinely purchasable product. Calls go to production.
+reference_store:
+  name: apiteststore
+  url: https://www.zazzle.com/store/apiteststore
+  account_id: '238268965591408603'
+  associate_id: '238268965591408603'
+  store_id: '250353676823748907'
+  template_category_id: '196915901559571818'
+  category_url: https://www.zazzle.com/store/apiteststore/products&cg=196915901559571818
+  note: >-
+    Zazzle's own published API test store. The account/associate/store/category IDs above are printed
+    in the public User Guide as working example values.
+template_products:
+- name: Mug template
+  product_id: '168619482839304922'
+  url: https://www.zazzle.com/api_documentation_test_template_mug-168619482839304922
+- name: Shirt template
+  product_id: '235581707908011183'
+  url: https://www.zazzle.com/api_documentation_test_template_shirt-235581707908011183
+- name: Phone case template
+  product_id: '179954474945723969'
+  url: https://www.zazzle.com/api_documentation_test_template_case-179954474945723969
+worked_examples:
+- name: 1-to-1 linkover — mug with text MOM and a heart image
+  surface: zazzle:create-a-product
+  mode: Linkover
+  url: https://www.zazzle.com/api/create/at-238268965591408603?rf=238268965591408603&ax=Linkover&pd=168619482839304922&ed=true&tc=apidocumentation&ic=&t_text1_txt=MOM&t_image1_iid=https%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1AYH4u8x4qWiCyaWMhdvvul9K5IHuPP2q
+- name: 1-to-1 linkover — shirt
+  surface: zazzle:create-a-product
+  mode: Linkover
+  url: https://www.zazzle.com/api/create/at-238268965591408603?rf=238268965591408603&ax=Linkover&pd=235581707908011183&ed=true&tc=apidocumentation&ic=&t_text1_txt=MOM&t_image1_iid=https%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1AYH4u8x4qWiCyaWMhdvvul9K5IHuPP2q
+- name: 1-to-1 linkover — phone case
+  surface: zazzle:create-a-product
+  mode: Linkover
+  url: https://www.zazzle.com/api/create/at-238268965591408603?rf=238268965591408603&ax=Linkover&pd=179954474945723969&ed=true&tc=apidocumentation&ic=&t_text1_txt=MOM&t_image1_iid=https%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1AYH4u8x4qWiCyaWMhdvvul9K5IHuPP2q
+- name: 1-to-many Templates Buffet — mug, shirt and case with MOM and a heart image
+  surface: zazzle:create-a-product
+  mode: DesignBlast
+  url: https://www.zazzle.com/api/create/at-238268965591408603?rf=238268965591408603&ax=DesignBlast&sr=250353676823748907&cg=196915901559571818&ed=true&continueUrl=http%3A%2F%2Fwww.zazzle.com%2Fapiteststore&tc=apidocumentation_1tomany_templatesbuffet&ic=redheart_googledrive&t_image1_iid=https%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1AYH4u8x4qWiCyaWMhdvvul9K5IHuPP2q&t_text1_txt=MOM
+- name: 1-to-many Templates Buffet — DAD with a clover image
+  surface: zazzle:create-a-product
+  mode: DesignBlast
+  url: https://www.zazzle.com/api/create/at-238268965591408603?rf=238268965591408603&ax=DesignBlast&sr=250353676823748907&cg=196915901559571818&ed=true&continueUrl=http%3A%2F%2Fwww.zazzle.com%2Fapiteststore&tc=apidocumentation_1tomany_templatesbuffet&ic=greenclover_googledrive&t_image1_iid=https%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1VyV4aMaN0K0Meu_XtS-HYWOoydqCiMaJ&t_text1_txt=DAD
+- name: RealView product image — mug at 512px
+  surface: zazzle:realview
+  url: https://rlv.zazzle.com/svc/view?pid=168619482839304922&max_dim=512&at=238268965591408603&t_text1_txt=MOM&t_image1_url=https%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1AYH4u8x4qWiCyaWMhdvvul9K5IHuPP2q&t_text1_txtclr=000000
+tooling:
+  link_builder:
+    url: https://www.zazzle.com/my/associate/create
+    description: >-
+      Zazzle's in-account link building tool, which generates both Template Links (1 to 1) and
+      Templates Buffet links (1 to many) and offers "Try link now" / "Preview in a new window"
+      test actions. Requires a Zazzle account.
+    note: >-
+      The store ID (`sr`) is documented as obtainable ONLY through this tool, so a fully manual
+      1-to-many integration cannot be built without signing in.
+vendor_api:
+  sandbox: false
+  note: >-
+    The Vendor (Maker) API has no test environment and no test vendor id. It cannot be exercised at
+    all without Zazzle-issued Maker credentials. The only anonymous behaviour available is the
+    parameter validator, which is what API Evangelist used to confirm the method surface.
+caveats:
+- >-
+  Propagation delay — a newly created store category or template can take up to 24 hours to become
+  usable by the API.
+- Templates are immutable once posted for sale; iterating on a design means creating a new product.
+- Templates used by the Templates Buffet flow must be set Public and G-Rated.

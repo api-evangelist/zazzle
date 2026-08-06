@@ -1,0 +1,134 @@
+openapi: 3.1.0
+info:
+  title: Zazzle RealView Product Image API
+  version: '3.0'
+  summary: Renders a dynamic product mockup image of a Zazzle template populated with partner content.
+  description: |
+    Zazzle's RealView(TM) image service returns a rendered product image for a Zazzle template with
+    partner-supplied images and text substituted into the template objects. It uses the same
+    parameter grammar as the Create-a-Product API, with two differences: the template is identified
+    by `pid` (not `pd`), and the image object parameter is `t_image1_url` (not `t_image1_iid`).
+
+    The response is an image, not a document — this endpoint is meant to be used directly as the
+    `src` of an `<img>` tag so a partner site can preview the finished product before linkover.
+
+    **Provenance.** Authored by API Evangelist from Zazzle's published *Create-A-Product API User
+    Guide & Documentation v3.0 (9/2019)*, "Dynamic RealView Product Images" section. Every parameter,
+    value constraint, and required flag is transcribed from that guide's parameter table. Zazzle
+    publishes no machine-readable OpenAPI.
+  contact:
+    name: Zazzle API Help Desk
+    email: api.help@zazzle.com
+    url: https://help.zazzle.com/hc/en-us/sections/360005063194-Create-A-Product-API
+  termsOfService: https://www.zazzle.com/terms/user_agreement
+x-provenance:
+  method: generated
+  generated: '2026-08-05'
+  source: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+  source_title: Zazzle Create-A-Product API User Guide & Documentation v3.0
+  source_http_status: 200
+  fetched: '2026-08-05'
+  host_probe:
+    url: https://rlv.zazzle.com/svc/view
+    http_status: 406
+    note: >-
+      Host is live. A bare GET with no parameters and no Accept negotiation returns 406; the
+      documented parameterized form is the supported call.
+servers:
+  - url: https://rlv.zazzle.com
+    description: Zazzle RealView image service
+tags:
+  - name: RealView
+    description: Dynamic product mockup image rendering.
+paths:
+  /svc/view:
+    get:
+      tags: [RealView]
+      operationId: getRealViewProductImage
+      summary: Render a RealView product image for a template
+      description: |
+        Returns a square product image of the given template with the supplied image and text
+        substituted into its template objects. Template object parameters are named after the URL
+        Parameter Name assigned to each object in the Zazzle design tool, defaulting to `image1`,
+        `text1`, … and incrementing per object.
+      parameters:
+        - name: pid
+          in: query
+          required: true
+          description: |
+            Template Product ID, the 18-digit number at the end of the template product URL.
+          schema:
+            type: string
+            pattern: '^[0-9]{18}$'
+          example: '168619482839304922'
+        - name: max_dim
+          in: query
+          required: true
+          description: |
+            Size in pixels of the returned (square) image. Values above 699 return an image with a
+            Zazzle-branded frame.
+          schema:
+            type: integer
+            minimum: 10
+            maximum: 2212
+          example: 512
+        - name: at
+          in: query
+          required: true
+          description: Your Zazzle member account ID.
+          schema:
+            type: string
+            pattern: '^[0-9]{18}$'
+        - name: t_image1_url
+          in: query
+          required: false
+          description: |
+            URL-encoded link to the image placed into the first template image object. Required when
+            the template declares an image object. Note this is `_url`, not the Create-a-Product
+            `_iid` suffix. Rename-aware: `t_<objectName>_url`.
+          schema:
+            type: string
+        - name: t_image2_url
+          in: query
+          required: false
+          description: URL-encoded link to the image placed into the second template image object.
+          schema:
+            type: string
+        - name: t_text1_txt
+          in: query
+          required: false
+          description: |
+            Encoded text placed into the first template text object. Required when the template
+            declares a text object.
+          schema:
+            type: string
+        - name: t_text2_txt
+          in: query
+          required: false
+          description: Encoded text placed into the second template text object.
+          schema:
+            type: string
+        - name: t_text1_txtclr
+          in: query
+          required: false
+          description: Text color for the first template text object, as a 6-digit hex color code.
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+      responses:
+        '200':
+          description: The rendered RealView product image.
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        '406':
+          description: >-
+            Returned for an unparameterized or unnegotiable request. Observed by API Evangelist on
+            2026-08-05 for a bare GET https://rlv.zazzle.com/svc/view.
+components: {}

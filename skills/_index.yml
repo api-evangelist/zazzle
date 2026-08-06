@@ -1,0 +1,33 @@
+generated: '2026-08-05'
+method: generated
+source: >-
+  openapi/zazzle-create-a-product-openapi.yml, openapi/zazzle-realview-openapi.yml,
+  openapi/zazzle-vendor-openapi.yml, conventions/zazzle-conventions.yml,
+  errors/zazzle-problem-types.yml, sandbox/zazzle-sandbox.yml
+note: >-
+  Zazzle publishes no AGENTS.md, skills files, or agent guidance of any kind. These skills were
+  written by API Evangelist and are grounded only in operations and RPC methods that exist — every
+  operationId is present verbatim in the referenced spec, and every Vendor method was confirmed
+  against the live endpoint.
+skills:
+- file: zazzle-create-product-from-template.md
+  name: Create a purchasable Zazzle product from a template
+  api: openapi/zazzle-create-a-product-openapi.yml
+  operations: [createProductFromTemplate, getRealViewProductImage]
+  audience: partner sites and apps monetizing user-generated content through Zazzle Associates
+- file: zazzle-maker-order-fulfillment.md
+  name: Pull, acknowledge, and ship a Zazzle Maker order
+  api: openapi/zazzle-vendor-openapi.yml
+  operations: [callVendorApiMethod]
+  rpc_methods:
+  - listneworders
+  - listcancelledorders
+  - getorder
+  - getpackingsheet
+  - getshippinglabel
+  - voidshippinglabel
+  - ackorder
+  audience: contracted Zazzle manufacturing partners (Makers)
+  safety: >-
+    Contains a hard warning on getshippinglabel — a read-named, GET-verb operation that purchases a
+    carrier label with no idempotency key.

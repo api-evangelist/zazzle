@@ -1,0 +1,94 @@
+generated: '2026-08-05'
+method: searched
+source: openapi/zazzle-vendor-openapi.yml
+docs: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - query
+  - path
+  oauth2_flows: []
+  note: >-
+    Zazzle publishes no OAuth 2.0, OIDC or bearer-token surface on any of its three public API
+    surfaces. Access is identifier-based (account/associate/vendor IDs carried in the URL) with a
+    per-call MD5 request signature on the partner-gated Vendor API only.
+schemes:
+- name: memberAccountId
+  type: apiKey
+  in: path
+  parameter: at
+  api: zazzle:create-a-product
+  description: >-
+    The partner's 18-digit Zazzle member account ID, carried in the path segment `at-<accountId>`
+    (and as the `at` query parameter on the RealView service). It identifies the account the
+    generated product is attributed to. It is not a secret — it appears in every public linkover URL.
+  sources:
+  - openapi/zazzle-create-a-product-openapi.yml
+  - openapi/zazzle-realview-openapi.yml
+- name: associateId
+  type: apiKey
+  in: query
+  parameter: rf
+  api: zazzle:create-a-product
+  description: >-
+    Optional 18-digit Zazzle Associate ID used for referral attribution and royalty crediting. Also
+    not a secret.
+  sources:
+  - openapi/zazzle-create-a-product-openapi.yml
+- name: vendorId
+  type: apiKey
+  in: query
+  parameter: vendorid
+  api: zazzle:vendor
+  description: Vendor identifier issued by Zazzle to an onboarded Maker.
+  sources:
+  - openapi/zazzle-vendor-openapi.yml
+- name: callHash
+  type: apiKey
+  in: query
+  parameter: hash
+  api: zazzle:vendor
+  description: >-
+    Per-call MD5 signature over the vendor id, the call's business parameters and the vendor's shared
+    secret. Functions as a request signature rather than a static key — the shared secret itself is
+    never transmitted.
+  sources:
+  - openapi/zazzle-vendor-openapi.yml
+authorization_model:
+  create_a_product:
+    style: origin-allowlist
+    description: >-
+      The Create-a-Product API has no credential in the conventional sense. Authorization is enforced
+      out of band by three account-level gates the partner must satisfy before linkovers render:
+      (1) enrollment in the Zazzle Associates Program, (2) acceptance of the Create-a-Product API
+      terms, and (3) declaration of the domains the partner's image URLs will be served from. An
+      image URL served from an undeclared domain fails with "Zazzle API Error: Image failed to
+      upload".
+    enrollment:
+    - https://www.zazzle.com/lgn/registration
+    - https://www.zazzle.com/my/associate/associate
+    - https://www.zazzle.com/my/associate/create_a_product_api_signup
+    - https://www.zazzle.com/my/associate/domains
+  vendor:
+    style: signed-request
+    description: >-
+      Zazzle-issued `vendorid` plus a per-call `hash`. Credentials are issued through Zazzle Maker
+      onboarding; there is no public self-service signup and no documented rotation or revocation
+      endpoint.
+    contact: maker.management@zazzle.com
+gaps:
+- No OAuth 2.0 / OpenID Connect surface on any Zazzle API.
+- No bearer tokens, no scoped access, no per-integration key with revocation.
+- Vendor API credentials and the hash construction are documented only in the Maker-issued PDF.
+- Secrets travel in the query string on the Vendor API, so they land in access logs and referrers.
+x-evidence:
+- url: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+  http_status: 200
+  content_type: application/pdf
+  fetched: '2026-08-05'
+- url: https://vendor.zazzle.com/v100/api.aspx?method=listneworders
+  http_status: 200
+  content_type: text/xml
+  fetched: '2026-08-05'
+  note: "anonymous call returns Invalid parameter 'hash' — confirms hash is required"

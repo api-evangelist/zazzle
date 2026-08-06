@@ -1,0 +1,48 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Zazzle Create-a-Product API
+  version: 1.0.0
+extends: openapi/zazzle-create-a-product-openapi.yml
+x-provenance:
+  generated: '2026-08-05'
+  method: generated
+  source: openapi/zazzle-create-a-product-openapi.yml
+  note: >-
+    Records the API Evangelist enhancements applied on top of the machine-readable rendering of
+    Zazzle's published Create-A-Product API User Guide v3.0. Zazzle publishes no OpenAPI, so the
+    base document is itself an API Evangelist artifact; this overlay isolates the annotations that
+    are our editorial judgement rather than transcription of the guide.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-profile: https://apis.io/provider/zazzle
+      x-apievangelist-source-format: pdf
+      x-apievangelist-provider-publishes-spec: false
+  - target: $.paths['/api/create/at-{accountId}'].get
+    update:
+      x-agent-safety:
+        writes: false
+        spends-money: false
+        idempotent: true
+        note: >-
+          The call itself creates nothing server-side; it renders a product page. Purchase happens
+          only when a human completes checkout on Zazzle.
+      x-dynamic-parameters:
+        pattern: 't_<objectName>_<suffix>'
+        suffixes: [_iid, _txt, _txtclr]
+        note: >-
+          The parameters documented on this operation are the DEFAULT object names only. A template
+          renames its objects freely, so the real parameter set is per-template and cannot be fully
+          enumerated in a static spec.
+      x-mode-matrix:
+        - ax: Linkover
+          requires: [pd]
+          produces: one product
+        - ax: DesignBlast
+          requires: [sr, cg]
+          produces: a Templates Buffet page of products
+  - target: $.paths['/api/create/at-{accountId}'].get.parameters[?(@.name=='continueUrl')]
+    update:
+      x-case-sensitive: true
+      x-common-failure: >-
+        Wrong casing is a documented cause of image upload failure.

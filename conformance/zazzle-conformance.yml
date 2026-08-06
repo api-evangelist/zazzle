@@ -1,0 +1,116 @@
+generated: '2026-08-05'
+method: derived
+source: >-
+  openapi/*.yml, conventions/zazzle-conventions.yml, errors/zazzle-problem-types.yml,
+  authentication/zazzle-authentication.yml, security/zazzle-domain-security.yml,
+  well-known/zazzle-well-known.yml
+summary: >-
+  Zazzle conforms to none of the cross-cutting API standards this pipeline checks. Its three surfaces
+  are pre-REST URL and XML-RPC contracts with no OAuth, no OIDC, no JSON, no problem details, no
+  discovery documents and no event specification. The two standards it does satisfy are
+  transport-layer hygiene (TLS 1.3, HSTS) and DNS-layer controls (CAA, SPF, DMARC at p=reject),
+  which are operated well.
+standards:
+- id: openapi
+  conforms: false
+  evidence: >-
+    Zazzle publishes no OpenAPI or Swagger document. Probed /openapi.json, /openapi.yaml,
+    /swagger.json, /v1/openapi.json, /api-docs, /docs and /redoc on api.zazzle.com — all hard 404s.
+    The OpenAPI files in this repo were authored by API Evangelist from the provider's published PDF
+    and live probes; they are not provider artifacts.
+- id: graphql
+  conforms: false
+  evidence: https://api.zazzle.com/graphql returns 404. No GraphQL surface found on any host.
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No event, streaming or webhook surface exists. Vendor order intake is poll-based via
+    `listneworders`. Not applicable rather than failed.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 securityScheme on any surface; /.well-known/oauth-authorization-server 404s on
+    api.zazzle.com. Access is URL-borne identifiers plus an MD5 request signature.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on api.zazzle.com.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    No application/problem+json anywhere. The Vendor API uses an XML <Response><Status> envelope and
+    returns HTTP 200 on error; Create-a-Product renders HTML error text.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    A security policy IS served at the canonical /.well-known/security.txt path on www.zazzle.com,
+    but as HTML, not as the RFC 9116 plain-text field format. Standards-compliant scanners get
+    nothing. The human policy is real; the machine-readable form is missing.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: No Sunset or Deprecation headers and no deprecation policy published.
+- id: rfc8615-well-known
+  conforms: partial
+  evidence: >-
+    Uses the /.well-known/ namespace for security.txt only, and serves HTML there. vendor.zazzle.com
+    answers 200 HTML for every /.well-known/* path (catch-all, confirmed by control probe), which
+    actively pollutes well-known discovery for that host.
+- id: json-api
+  conforms: false
+  evidence: No JSON media type is emitted by any Zazzle API surface.
+- id: idempotency-key
+  conforms: false
+  evidence: >-
+    No idempotency key on any surface, including the state-changing Vendor methods `getshippinglabel`
+    (which purchases a carrier label) and `ackorder`.
+- id: pagination
+  conforms: false
+  evidence: >-
+    `listneworders` and `listcancelledorders` accept no page, cursor or limit parameter. The
+    `page` parameter on `getpackingsheet` paginates a printed document, not a result set.
+- id: rate-limit-headers
+  conforms: false
+  evidence: No RateLimit-* or Retry-After headers documented or observed; no published quotas.
+- id: tls13
+  conforms: true
+  evidence: >-
+    TLSv1.3 negotiated on www.zazzle.com, rlv.zazzle.com and makerhelp.zazzle.com. See
+    security/zazzle-domain-security.yml.
+- id: hsts
+  conforms: true
+  evidence: >-
+    HSTS present on all probed hosts; max-age 31622400 on www.zazzle.com and rlv.zazzle.com
+    (makerhelp.zazzle.com is a short 259200).
+- id: dnssec
+  conforms: false
+  evidence: zazzle.com is not DNSSEC-signed.
+- id: caa
+  conforms: true
+  evidence: >-
+    zazzle.com publishes CAA restricting issuance to sectigo.com and digicert.com, with
+    iodef mailto:security@zazzle.com.
+- id: spf
+  conforms: true
+  evidence: SPF record present for zazzle.com.
+- id: dmarc
+  conforms: true
+  evidence: DMARC present for zazzle.com with policy p=reject.
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json probed on www.zazzle.com,
+    api.zazzle.com, vendor.zazzle.com, rlv.zazzle.com and asset.zcache.com. No agent card exists;
+    every 200 observed was a catch-all HTML body, rejected against a control path.
+- id: mcp
+  conforms: false
+  evidence: No hosted MCP server found; mcp.zazzle.com does not resolve.
+- id: llms-txt
+  conforms: false
+  evidence: https://www.zazzle.com/llms.txt returns 404.
+compliance_program:
+  published: false
+  certifications: []
+  trust_center: null
+  note: >-
+    No trust center, compliance page, or named certification (SOC 2, ISO 27001, PCI DSS, HIPAA,
+    FedRAMP) was found. trust.zazzle.com and security.zazzle.com do not resolve. No Compliance or
+    TrustCenter pointer is emitted in apis.yml — emitting one would be false credit.

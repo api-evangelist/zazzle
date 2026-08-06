@@ -1,0 +1,33 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Zazzle RealView Product Image API
+  version: 1.0.0
+extends: openapi/zazzle-realview-openapi.yml
+x-provenance:
+  generated: '2026-08-05'
+  method: generated
+  source: openapi/zazzle-realview-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-profile: https://apis.io/provider/zazzle
+      x-apievangelist-provider-publishes-spec: false
+  - target: $.paths['/svc/view'].get
+    update:
+      x-agent-safety:
+        writes: false
+        spends-money: false
+        idempotent: true
+      x-suffix-divergence:
+        this_surface: t_image1_url
+        sibling_surface: t_image1_iid
+        sibling: openapi/zazzle-create-a-product-openapi.yml
+        note: >-
+          The same template object is addressed with a different suffix on each surface. Zazzle's own
+          troubleshooting table lists confusing the two as a top support issue.
+  - target: $.paths['/svc/view'].get.parameters[?(@.name=='max_dim')]
+    update:
+      x-branding-threshold: 699
+      x-note: >-
+        Values above 699 return an image with a Zazzle-branded frame. Partners wanting an unbranded
+        preview must stay at or below 699.

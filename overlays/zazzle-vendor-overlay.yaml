@@ -1,0 +1,50 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Zazzle Vendor (Maker) API
+  version: 1.0.0
+extends: openapi/zazzle-vendor-openapi.yml
+x-provenance:
+  generated: '2026-08-05'
+  method: generated
+  source: openapi/zazzle-vendor-openapi.yml
+  note: >-
+    The base document was reconstructed from anonymous live parameter-validation probes because
+    Zazzle distributes its Vendor API guide only to onboarded Makers. This overlay carries the
+    agent-safety and error-handling annotations that are API Evangelist judgement.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-profile: https://apis.io/provider/zazzle
+      x-apievangelist-provider-publishes-spec: false
+      x-access: partner-gated
+  - target: $.paths['/api.aspx'].get
+    update:
+      x-error-transport:
+        http_status_on_error: 200
+        status_location: Response/Status/Code
+        warning: >-
+          CRITICAL for clients and agents. This API returns HTTP 200 for errors. Any client that
+          branches on the HTTP status line will silently treat every failure as a success.
+      x-agent-safety:
+        read_methods: [listneworders, listcancelledorders, getorder, getpackingsheet]
+        write_methods: [ackorder]
+        spending_methods: [getshippinglabel]
+        destructive_methods: [voidshippinglabel]
+        idempotency_key: null
+        warning: >-
+          getshippinglabel PURCHASES a carrier label. It is a GET with a read-shaped name and no
+          idempotency key, which makes it the single most dangerous operation in Zazzle's public
+          surface for an autonomous retry loop. Gate it behind human confirmation.
+      x-non-methods:
+        confirmed_absent:
+          - getorders
+          - listorders
+          - getpackingslip
+          - setordershipped
+          - getorderstatus
+          - cancelorder
+          - gettracking
+          - getprintfiles
+        note: >-
+          Confirmed against the live endpoint on 2026-08-05. An unimplemented method is reported
+          identically to a typo ("Invalid parameter 'method'"), so callers get no discovery signal.

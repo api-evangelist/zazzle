@@ -37,26 +37,17 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- aid: zazzle:create-a-product
-  name: Zazzle Create-a-Product API
+- aid: zazzle:zazzle-create-a-product-api
+  name: Zazzle Create a Product API
   description: >-
-    URL linkover API that injects a partner site's images and text into a Zazzle product template and
-    returns a finished, purchasable product. Supports 1-to-1 (single template, ax=Linkover) and
-    1-to-many (a store category of templates, ax=DesignBlast, the "Templates Buffet"). No request
-    body and no token — the entire contract is the query string. Requires a Zazzle account,
-    enrollment in the Associates Program, acceptance of the API terms, and declaration of the domains
-    the partner's image URLs are served from.
+    Build a purchasable Zazzle product from a template plus partner-supplied images and text.
   humanURL: https://www.zazzle.com/api
   baseURL: https://www.zazzle.com/api/create/
   tags:
-  - Custom Products
-  - E-Commerce
-  - Affiliate
+  - Create a Product
   properties:
   - type: OpenAPI
-    url: openapi/zazzle-create-a-product-openapi.yml
-  - type: Overlay
-    url: overlays/zazzle-create-a-product-overlay.yaml
+    url: openapi/zazzle-create-a-product-api-openapi.yml
   - type: Documentation
     url: https://www.zazzle.com/sell/developers
   - type: APIReference
@@ -65,51 +56,62 @@ apis:
     url: https://help.zazzle.com/hc/en-us/sections/360005063194-Create-A-Product-API
   - type: Support
     url: mailto:api.help@zazzle.com
-- aid: zazzle:realview
-  name: Zazzle RealView Product Image API
-  description: >-
-    Dynamic product mockup image service. Given a Zazzle template product ID and the same
-    partner-supplied image/text parameters used by the Create-a-Product API, returns a rendered
-    square product image suitable for use directly as an img src on the partner's own site.
+  - type: Documentation
+    url: >-
+      https://makerhelp.zazzle.com/hc/en-us/articles/360011479634-Does-Zazzle-have-an-API-that-I-can-integrate-against-to-receive-my-order-information
+  - type: Support
+    url: mailto:maker.management@zazzle.com
+- aid: zazzle:zazzle-realview-api
+  name: Zazzle Real View API
+  description: Dynamic product mockup image rendering.
   humanURL: https://www.zazzle.com/api
-  baseURL: https://rlv.zazzle.com/svc/
+  baseURL: https://www.zazzle.com/api/create/
   tags:
-  - Images
-  - Custom Products
-  - E-Commerce
+  - RealView
   properties:
   - type: OpenAPI
-    url: openapi/zazzle-realview-openapi.yml
-  - type: Overlay
-    url: overlays/zazzle-realview-overlay.yaml
+    url: openapi/zazzle-realview-api-openapi.yml
+  - type: Documentation
+    url: https://www.zazzle.com/sell/developers
   - type: APIReference
     url: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
-- aid: zazzle:vendor
-  name: Zazzle Vendor (Maker) API
-  description: >-
-    Partner-gated XML RPC API used by Zazzle manufacturing partners (Makers) to pull new and
-    cancelled orders, retrieve a single order with its line items and print files, fetch packing
-    sheets, and buy or void Zazzle-issued shipping labels. Single endpoint /v100/api.aspx with the
-    operation selected by a method query parameter, authenticated with a Zazzle-issued vendorid plus
-    a per-call MD5 request signature. No public self-service signup — credentials are issued through
-    Zazzle Maker onboarding.
-  humanURL: https://makerhelp.zazzle.com/hc/en-us
-  baseURL: https://vendor.zazzle.com/v100/
+  - type: GettingStarted
+    url: https://help.zazzle.com/hc/en-us/sections/360005063194-Create-A-Product-API
+  - type: Support
+    url: mailto:api.help@zazzle.com
+  - type: Documentation
+    url: >-
+      https://makerhelp.zazzle.com/hc/en-us/articles/360011479634-Does-Zazzle-have-an-API-that-I-can-integrate-against-to-receive-my-order-information
+  - type: Support
+    url: mailto:maker.management@zazzle.com
+- aid: zazzle:zazzle-vendor-api
+  name: Zazzle Vendor API
+  description: Maker order retrieval, acknowledgement, packing sheets and shipping labels.
+  humanURL: https://www.zazzle.com/api
+  baseURL: https://www.zazzle.com/api/create/
   tags:
-  - Order Management
-  - Shipping
-  - Manufacturing
-  - Print On Demand
+  - Vendor
   properties:
   - type: OpenAPI
-    url: openapi/zazzle-vendor-openapi.yml
-  - type: Overlay
-    url: overlays/zazzle-vendor-overlay.yaml
+    url: openapi/zazzle-vendor-api-openapi.yml
   - type: Documentation
-    url: https://makerhelp.zazzle.com/hc/en-us/articles/360011479634-Does-Zazzle-have-an-API-that-I-can-integrate-against-to-receive-my-order-information
+    url: https://www.zazzle.com/sell/developers
+  - type: APIReference
+    url: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+  - type: GettingStarted
+    url: https://help.zazzle.com/hc/en-us/sections/360005063194-Create-A-Product-API
+  - type: Support
+    url: mailto:api.help@zazzle.com
+  - type: Documentation
+    url: >-
+      https://makerhelp.zazzle.com/hc/en-us/articles/360011479634-Does-Zazzle-have-an-API-that-I-can-integrate-against-to-receive-my-order-information
   - type: Support
     url: mailto:maker.management@zazzle.com
 common:
+- type: MCPServer
+  url: mcp/zazzle-mcp.yml
+- type: Overlay
+  url: overlays/zazzle-create-a-product-overlay.yaml
 - type: Website
   url: https://www.zazzle.com/
 - type: DeveloperPortal

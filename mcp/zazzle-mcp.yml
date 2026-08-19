@@ -1,14 +1,11 @@
 generated: '2026-08-05'
 method: derived
 status: candidate
-source: >-
-  openapi/zazzle-create-a-product-openapi.yml, openapi/zazzle-realview-openapi.yml,
-  openapi/zazzle-vendor-openapi.yml
-summary: >-
-  Zazzle publishes NO MCP server. mcp.zazzle.com does not resolve, no /.well-known/ai-plugin.json
-  exists on any host, and no Zazzle server appears in the public MCP registries. The tool list below
-  is a CANDIDATE derived from the API surface documented in this repo — a design proposal for what a
-  Zazzle MCP server would expose, not a claim that one exists.
+source: openapi/zazzle-create-a-product-openapi.yml, openapi/zazzle-realview-openapi.yml, openapi/zazzle-vendor-openapi.yml
+summary: Zazzle publishes NO MCP server. mcp.zazzle.com does not resolve, no /.well-known/ai-plugin.json
+  exists on any host, and no Zazzle server appears in the public MCP registries. The tool list below is
+  a CANDIDATE derived from the API surface documented in this repo — a design proposal for what a Zazzle
+  MCP server would expose, not a claim that one exists.
 server:
   name: zazzle
   published: false
@@ -23,23 +20,20 @@ probes:
   fetched: '2026-08-05'
 tools:
 - name: create_product_from_template
-  description: >-
-    Build a purchasable Zazzle product by injecting an image URL and/or text into a Zazzle product
-    template, returning the linkover URL the buyer lands on.
+  description: Build a purchasable Zazzle product by injecting an image URL and/or text into a Zazzle
+    product template, returning the linkover URL the buyer lands on.
   source_operation: openapi/zazzle-create-a-product-openapi.yml#createProductFromTemplate
   mode: Linkover
   read_only: true
 - name: create_templates_buffet
-  description: >-
-    Build a Templates Buffet linkover that applies one image and/or text across every template in a
-    Zazzle store category, generating many products from one call.
+  description: Build a Templates Buffet linkover that applies one image and/or text across every template
+    in a Zazzle store category, generating many products from one call.
   source_operation: openapi/zazzle-create-a-product-openapi.yml#createProductFromTemplate
   mode: DesignBlast
   read_only: true
 - name: render_product_preview
-  description: >-
-    Render a RealView product mockup image for a Zazzle template populated with the supplied image
-    and text, for preview before linkover.
+  description: Render a RealView product mockup image for a Zazzle template populated with the supplied
+    image and text, for preview before linkover.
   source_operation: openapi/zazzle-realview-openapi.yml#getRealViewProductImage
   read_only: true
 - name: list_new_orders
@@ -74,18 +68,16 @@ tools:
   requires_credentials: true
   human_in_the_loop: recommended
 - name: buy_shipping_label
-  description: >-
-    Buy and retrieve the carrier shipping label for an order. RETURNS carrier, method, tracking
+  description: Buy and retrieve the carrier shipping label for an order. RETURNS carrier, method, tracking
     number, weight and document URLs.
   source_operation: openapi/zazzle-vendor-openapi.yml#callVendorApiMethod
   rpc_method: getshippinglabel
   read_only: false
   requires_credentials: true
   human_in_the_loop: required
-  warning: >-
-    Despite the read-shaped `get` name and the HTTP GET verb, this operation SPENDS MONEY — it
-    purchases a carrier label. It carries no idempotency key, so a naive retry has no documented
-    deduplication behaviour. Any agent wiring must treat it as a write with a confirmation gate.
+  warning: Despite the read-shaped `get` name and the HTTP GET verb, this operation SPENDS MONEY — it
+    purchases a carrier label. It carries no idempotency key, so a naive retry has no documented deduplication
+    behaviour. Any agent wiring must treat it as a write with a confirmation gate.
 - name: void_shipping_label
   description: Void a previously purchased shipping label by tracking number.
   source_operation: openapi/zazzle-vendor-openapi.yml#callVendorApiMethod
@@ -94,11 +86,15 @@ tools:
   requires_credentials: true
   human_in_the_loop: required
 notes:
-- >-
-  Every Vendor tool needs Zazzle-issued Maker credentials (vendorid + per-call MD5 hash). There is no
-  public self-service path to them, so a general-purpose Zazzle MCP server could only ship the
-  Create-a-Product and RealView tools to an unaffiliated user.
-- >-
-  The Vendor API returns HTTP 200 on error with the real status inside the XML body. Any MCP server
-  fronting it must parse Response/Status/Code and surface ERROR as a tool error, or every failure
-  will be reported to the model as a success.
+- Every Vendor tool needs Zazzle-issued Maker credentials (vendorid + per-call MD5 hash). There is no
+  public self-service path to them, so a general-purpose Zazzle MCP server could only ship the Create-a-Product
+  and RealView tools to an unaffiliated user.
+- The Vendor API returns HTTP 200 on error with the real status inside the XML body. Any MCP server fronting
+  it must parse Response/Status/Code and surface ERROR as a tool error, or every failure will be reported
+  to the model as a success.
+deployment:
+  mode: none
+  verified: derived
+  tools: 10
+  checked: '2026-08-12'
+  source: catalog MCP census

@@ -1,0 +1,325 @@
+openapi: 3.2.0
+info:
+  title: Zazzle (Maker) API v100 Vendor API
+  version: v100
+  summary: Partner-gated XML RPC API that Zazzle Makers use to pull orders, packing sheets and shipping labels.
+  description: 'Zazzle''s Maker/Vendor API is the integration surface Zazzle manufacturing partners ("Makers") use
+
+    to pull new orders into their own order-management systems, acknowledge them, fetch the packing
+
+    sheet and print files, and buy or void the Zazzle-provided shipping label. Zazzle''s Maker Manual
+
+    describes it as providing "order information, a packing slip as a PDF and the shipping labels".
+
+
+    It is an **RPC-over-query-string** API, not a resource API: every call is a `GET` to a single
+
+    endpoint, `/v100/api.aspx`, with the operation selected by the `method` query parameter. The
+
+    response media type is `text/xml`, wrapped in a `<Response>` envelope carrying a
+
+    `<Status><Code>` of `OK` or `ERROR`.
+
+
+    Because OpenAPI cannot express two operations on one path, the method surface is modelled as one
+
+    operation with a `method` enum, and the per-method parameter contract is recorded verbatim under
+
+    `x-rpc-methods` below.
+
+
+    **Access.** Calls require a `vendorid` issued by Zazzle plus a per-call `hash` — an MD5 digest
+
+    over the vendor id, the call''s business parameters, and a vendor-specific shared secret. There is
+
+    no OAuth, no bearer token, and no public self-service signup: the credential is issued as part of
+
+    the Zazzle Maker onboarding. Contact `maker.management@zazzle.com`.
+
+
+    **Provenance.** Zazzle publishes no machine-readable specification and its Vendor API guide
+
+    (referenced in the wild as "Zazzle Vendor API Documentation v1.12.pdf") is distributed to
+
+    onboarded Makers rather than published. Every method name and required parameter recorded here
+
+    was confirmed by API Evangelist against the **live, anonymous** endpoint on 2026-08-05: the API''s
+
+    own validator names the next missing parameter, so an unknown method returns
+
+    `Invalid parameter ''method''` while a real method advances to naming its first missing business
+
+    parameter. No credentials were used and no access control was defeated. See `x-evidence`.
+
+    '
+  contact:
+    name: Zazzle Maker Management
+    email: maker.management@zazzle.com
+    url: https://makerhelp.zazzle.com/hc/en-us
+servers:
+- url: https://vendor.zazzle.com/v100
+  description: Zazzle Vendor/Maker API, version 100
+tags:
+- name: Vendor
+  description: Maker order retrieval, acknowledgement, packing sheets and shipping labels.
+paths:
+  /api.aspx:
+    get:
+      tags:
+      - Vendor
+      operationId: callVendorApiMethod
+      summary: Invoke a Zazzle Vendor API method
+      description: 'Single RPC entry point. Select the operation with `method`; supply that method''s business
+
+        parameters plus `vendorid` and the per-call `hash`. See `x-rpc-methods` on this operation for
+
+        the confirmed method surface and each method''s required parameter set.
+
+        '
+      parameters:
+      - name: method
+        in: query
+        required: true
+        description: The Vendor API method to invoke.
+        schema:
+          type: string
+          enum:
+          - listneworders
+          - listcancelledorders
+          - getorder
+          - getpackingsheet
+          - getshippinglabel
+          - ackorder
+          - voidshippinglabel
+      - name: vendorid
+        in: query
+        required: true
+        description: The vendor identifier Zazzle issues to an onboarded Maker.
+        schema:
+          type: string
+      - name: hash
+        in: query
+        required: true
+        description: 'Per-call MD5 signature over the vendor id, the call''s business parameters, and the
+
+          vendor''s shared secret. The exact concatenation order is method-specific and is issued
+
+          with the Maker credentials.
+
+          '
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{32}$
+      - name: orderid
+        in: query
+        required: false
+        description: Zazzle order identifier. Required for `getorder`, `getpackingsheet`, `getshippinglabel` and `ackorder`.
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        description: Packing sheet page to return. Required for `getpackingsheet`.
+        schema:
+          type: string
+      - name: weight
+        in: query
+        required: false
+        description: Parcel weight used to rate the label. Required for `getshippinglabel`.
+        schema:
+          type: string
+      - name: format
+        in: query
+        required: false
+        description: Requested shipping label document format. Required for `getshippinglabel`. Public Maker integrations use `PNG`; the full enumeration is documented in the Maker-issued guide and is deliberately not guessed here.
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: false
+        description: Acknowledgement type. Required for `ackorder`.
+        schema:
+          type: string
+      - name: tracking
+        in: query
+        required: false
+        description: Carrier tracking number of the label to void. Required for `voidshippinglabel`.
+        schema:
+          type: string
+      x-rpc-methods:
+      - method: listneworders
+        summary: List orders newly assigned to this Maker and not yet acknowledged.
+        required:
+        - method
+        - vendorid
+        - hash
+        confirmed: live-probe
+      - method: listcancelledorders
+        summary: List orders cancelled by Zazzle or the buyer.
+        required:
+        - method
+        - vendorid
+        - hash
+        confirmed: live-probe
+      - method: getorder
+        summary: Retrieve a single order, including shipping address, line items and print files.
+        required:
+        - method
+        - vendorid
+        - orderid
+        - hash
+        confirmed: live-probe
+      - method: getpackingsheet
+        summary: Retrieve a page of the order's packing sheet as a printable document.
+        required:
+        - method
+        - vendorid
+        - orderid
+        - page
+        - hash
+        confirmed: live-probe
+      - method: getshippinglabel
+        summary: Buy and retrieve the shipping label for an order; returns carrier, method, tracking number, weight and the shipping document URLs (label, and commercial invoice for international shipments).
+        required:
+        - method
+        - vendorid
+        - orderid
+        - weight
+        - format
+        - hash
+        confirmed: live-probe
+      - method: ackorder
+        summary: Acknowledge receipt or state change of an order.
+        required:
+        - method
+        - vendorid
+        - orderid
+        - type
+        - hash
+        confirmed: live-probe
+      - method: voidshippinglabel
+        summary: Void a previously purchased shipping label by tracking number.
+        required:
+        - method
+        - vendorid
+        - tracking
+        - hash
+        confirmed: live-probe
+      security:
+      - vendorId: []
+        callHash: []
+      responses:
+        '200':
+          description: 'XML `<Response>` envelope. `Status/Code` is `OK` on success and `ERROR` on failure, with
+
+            a human-readable `Status/Info`. Success payloads sit under `Result`. Response schemas are
+
+            not modelled here because Zazzle does not publish them and API Evangelist holds no
+
+            authenticated sample.
+
+            '
+          content:
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/VendorResponse'
+              examples:
+                invalidParameter:
+                  summary: Observed anonymous error response (2026-08-05)
+                  value: "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Response>\n  <Status>\n    <Code>ERROR</Code>\n    <Info>Invalid parameter 'hash'. Is there an error in the parameter name?  Recheck and attempt again.  If problem persists contact maker.management@zazzle.com and reference Invalid_ Parameter_Name </Info>\n  </Status>\n</Response>\n"
+components:
+  schemas:
+    VendorResponse:
+      type: object
+      description: Root `<Response>` element of every Vendor API reply.
+      properties:
+        Status:
+          $ref: '#/components/schemas/VendorStatus'
+        Result:
+          type: object
+          description: Method-specific payload, present on success. Zazzle does not publish the per-method shapes; they are intentionally left unconstrained rather than guessed.
+          additionalProperties: true
+      required:
+      - Status
+    VendorStatus:
+      type: object
+      properties:
+        Code:
+          type: string
+          enum:
+          - OK
+          - ERROR
+        Info:
+          type: string
+          description: Human-readable status or error detail.
+      required:
+      - Code
+  securitySchemes:
+    vendorId:
+      type: apiKey
+      in: query
+      name: vendorid
+      description: Vendor identifier issued by Zazzle to an onboarded Maker.
+    callHash:
+      type: apiKey
+      in: query
+      name: hash
+      description: Per-call MD5 signature over the vendor id, the call's business parameters and the vendor's shared secret. Functions as a request signature rather than a static key.
+x-provenance:
+  method: probed
+  generated: '2026-08-05'
+  source: https://vendor.zazzle.com/v100/api.aspx
+  fetched: '2026-08-05'
+  technique: Anonymous parameter-validation differential. The endpoint returns <Response><Status><Code>ERROR</Code><Info>Invalid parameter '<name>'...</Info></Status></Response> naming the first parameter it cannot satisfy. A method the server does not implement always reports `method` as the invalid parameter; an implemented method reports its own first missing parameter instead. Method names were seeded from Zazzle's public help material and from public third-party Maker integrations, then each was independently confirmed or rejected against the live endpoint.
+  docs_note: Zazzle Vendor API Documentation v1.12.pdf is not published at a public URL; it is issued to onboarded Makers. Response schemas below are therefore left unspecified rather than guessed.
+x-evidence:
+- url: https://vendor.zazzle.com/v100/api.aspx?method=listneworders
+  http_status: 200
+  content_type: text/xml
+  body_signal: Invalid parameter 'hash'
+  conclusion: method implemented; requires hash (and vendorid)
+- url: https://vendor.zazzle.com/v100/api.aspx?method=listcancelledorders
+  http_status: 200
+  content_type: text/xml
+  body_signal: Invalid parameter 'hash'
+  conclusion: method implemented
+- url: https://vendor.zazzle.com/v100/api.aspx?method=getorder
+  http_status: 200
+  content_type: text/xml
+  body_signal: Invalid parameter 'orderid'
+  conclusion: method implemented
+- url: https://vendor.zazzle.com/v100/api.aspx?method=getpackingsheet
+  http_status: 200
+  content_type: text/xml
+  body_signal: Invalid parameter 'orderid'
+  conclusion: method implemented
+- url: https://vendor.zazzle.com/v100/api.aspx?method=getshippinglabel
+  http_status: 200
+  content_type: text/xml
+  body_signal: Invalid parameter 'orderid'
+  conclusion: method implemented
+- url: https://vendor.zazzle.com/v100/api.aspx?method=ackorder
+  http_status: 200
+  content_type: text/xml
+  body_signal: Invalid parameter 'orderid'
+  conclusion: method implemented
+- url: https://vendor.zazzle.com/v100/api.aspx?method=voidshippinglabel
+  http_status: 200
+  content_type: text/xml
+  body_signal: Invalid parameter 'tracking'
+  conclusion: method implemented
+- url: https://vendor.zazzle.com/v100/api.aspx?method=getorders
+  http_status: 200
+  content_type: text/xml
+  body_signal: Invalid parameter 'method'
+  conclusion: NOT implemented (control)
+- url: https://vendor.zazzle.com/v100/api.aspx?method=getpackingslip
+  http_status: 200
+  content_type: text/xml
+  body_signal: Invalid parameter 'method'
+  conclusion: NOT implemented (control)
+- url: https://vendor.zazzle.com/v100/api.aspx?method=setordershipped
+  http_status: 200
+  content_type: text/xml
+  body_signal: Invalid parameter 'method'
+  conclusion: NOT implemented (control)

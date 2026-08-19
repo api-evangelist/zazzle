@@ -1,0 +1,91 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zazzle (Maker) API v100 Vendor API",
+    "version": "v100"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Vendor",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Invoke a Zazzle Vendor API method",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://vendor.zazzle.com/v100/api.aspx",
+            "params": [
+              {
+                "name": "method",
+                "value": "",
+                "type": "query",
+                "description": "The Vendor API method to invoke."
+              },
+              {
+                "name": "vendorid",
+                "value": "",
+                "type": "query",
+                "description": "The vendor identifier Zazzle issues to an onboarded Maker."
+              },
+              {
+                "name": "hash",
+                "value": "",
+                "type": "query",
+                "description": "Per-call MD5 signature over the vendor id, the call's business parameters, and the\nvendor's shared secret. The exact concatenation order is method-specific and is issued\nwith the Maker credentials.\n"
+              },
+              {
+                "name": "orderid",
+                "value": "",
+                "type": "query",
+                "description": "Zazzle order identifier. Required for `getorder`, `getpackingsheet`, `getshippinglabel` and `ackorder`."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Packing sheet page to return. Required for `getpackingsheet`."
+              },
+              {
+                "name": "weight",
+                "value": "",
+                "type": "query",
+                "description": "Parcel weight used to rate the label. Required for `getshippinglabel`."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Requested shipping label document format. Required for `getshippinglabel`. Public Maker integrations use `PNG`; the full enumeration is documented in the Maker-issued guide and is deliberately not guessed here."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Acknowledgement type. Required for `ackorder`."
+              },
+              {
+                "name": "tracking",
+                "value": "",
+                "type": "query",
+                "description": "Carrier tracking number of the label to void. Required for `voidshippinglabel`."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "vendorid",
+              "value": "{{vendorid}}",
+              "placement": "query"
+            }
+          },
+          "docs": "Single RPC entry point. Select the operation with `method`; supply that method's business\nparameters plus `vendorid` and the per-call `hash`. See `x-rpc-methods` on this operation for\nthe confirmed method surface and each method's required parameter set.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

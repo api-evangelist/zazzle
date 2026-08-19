@@ -1,0 +1,249 @@
+{
+  "item": [
+    {
+      "id": "27e0eb81-a2de-4819-9eff-dd7e9b39b557",
+      "name": "RealView",
+      "description": {
+        "content": "Dynamic product mockup image rendering.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5a0645f3-7fc8-4798-bc46-9f6d414bbdb7",
+          "name": "Render a RealView product image for a template",
+          "request": {
+            "name": "Render a RealView product image for a template",
+            "description": {
+              "content": "Returns a square product image of the given template with the supplied image and text\nsubstituted into its template objects. Template object parameters are named after the URL\nParameter Name assigned to each object in the Zazzle design tool, defaulting to `image1`,\n`text1`, … and incrementing per object.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "svc",
+                "view"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pid",
+                  "value": "<string>",
+                  "description": "(Required) Template Product ID, the 18-digit number at the end of the template product URL.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "max_dim",
+                  "value": "<integer>",
+                  "description": "(Required) Size in pixels of the returned (square) image. Values above 699 return an image with a\nZazzle-branded frame.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "at",
+                  "value": "<string>",
+                  "description": "(Required) Your Zazzle member account ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "t_image1_url",
+                  "value": "<string>",
+                  "description": "URL-encoded link to the image placed into the first template image object. Required when\nthe template declares an image object. Note this is `_url`, not the Create-a-Product\n`_iid` suffix. Rename-aware: `t_<objectName>_url`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "t_image2_url",
+                  "value": "<string>",
+                  "description": "URL-encoded link to the image placed into the second template image object."
+                },
+                {
+                  "disabled": false,
+                  "key": "t_text1_txt",
+                  "value": "<string>",
+                  "description": "Encoded text placed into the first template text object. Required when the template\ndeclares a text object.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "t_text2_txt",
+                  "value": "<string>",
+                  "description": "Encoded text placed into the second template text object."
+                },
+                {
+                  "disabled": false,
+                  "key": "t_text1_txtclr",
+                  "value": "<string>",
+                  "description": "Text color for the first template text object, as a 6-digit hex color code."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "image/png"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e87f4d73-eee3-4c4c-9c2f-c824c76d9b2c",
+              "name": "The rendered RealView product image.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "svc",
+                    "view"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pid",
+                      "value": "168619482839304922"
+                    },
+                    {
+                      "key": "max_dim",
+                      "value": "512"
+                    },
+                    {
+                      "key": "at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_image1_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_image2_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text1_txt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text2_txt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text1_txtclr",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "image/png"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "image/png"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bdbea4c9-7017-4c49-b936-cc139e678c76",
+              "name": "Returned for an unparameterized or unnegotiable request. Observed by API Evangelist on 2026-08-05 for a bare GET https://rlv.zazzle.com/svc/view.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "svc",
+                    "view"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pid",
+                      "value": "168619482839304922"
+                    },
+                    {
+                      "key": "max_dim",
+                      "value": "512"
+                    },
+                    {
+                      "key": "at",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_image1_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_image2_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text1_txt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text2_txt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text1_txtclr",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://rlv.zazzle.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a2f3b4bd-f3f0-4abe-a6ed-c0de34fe24af",
+    "name": "Zazzle Product Image Real View API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Zazzle's RealView(TM) image service returns a rendered product image for a Zazzle template with\npartner-supplied images and text substituted into the template objects. It uses the same\nparameter grammar as the Create-a-Product API, with two differences: the template is identified\nby `pid` (not `pd`), and the image object parameter is `t_image1_url` (not `t_image1_iid`).\n\nThe response is an image, not a document — this endpoint is meant to be used directly as the\n`src` of an `<img>` tag so a partner site can preview the finished product before linkover.\n\n**Provenance.** Authored by API Evangelist from Zazzle's published *Create-A-Product API User\nGuide & Documentation v3.0 (9/2019)*, \"Dynamic RealView Product Images\" section. Every parameter,\nvalue constraint, and required flag is transcribed from that guide's parameter table. Zazzle\npublishes no machine-readable OpenAPI.\n\n\nContact Support:\n Name: Zazzle API Help Desk\n Email: api.help@zazzle.com",
+      "type": "text/plain"
+    }
+  }
+}

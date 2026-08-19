@@ -1,0 +1,121 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zazzle Create-a-Product Create a Product API",
+    "version": "3.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Create a Product",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create one or many Zazzle products from a template linkover",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.zazzle.com/api/create/at-:accountId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "238268965591408603",
+                "type": "path",
+                "description": "Your Zazzle member account ID, carried in the path segment as `at-<accountId>`."
+              },
+              {
+                "name": "ax",
+                "value": "",
+                "type": "query",
+                "description": "Type of API request. `Linkover` generates a single product from a single template (`pd`\nrequired). `DesignBlast` generates many products from a store category (`sr` and `cg`\nrequired).\n"
+              },
+              {
+                "name": "rf",
+                "value": "",
+                "type": "query",
+                "description": "Your Zazzle Associate ID, used for referral attribution."
+              },
+              {
+                "name": "pd",
+                "value": "168619482839304922",
+                "type": "query",
+                "description": "Template Product ID, taken from the tail of the template product URL. Required when\n`ax=Linkover`.\n"
+              },
+              {
+                "name": "sr",
+                "value": "",
+                "type": "query",
+                "description": "Store ID where the template products reside. Required when `ax=DesignBlast`. Zazzle\ndocuments this value as obtainable only through the link building tool.\n"
+              },
+              {
+                "name": "cg",
+                "value": "",
+                "type": "query",
+                "description": "Store category ID holding the templates. Required when `ax=DesignBlast`. The default\n\"New Products\" category cannot be used.\n"
+              },
+              {
+                "name": "ed",
+                "value": "",
+                "type": "query",
+                "description": "Whether the customer may further personalize the generated product on Zazzle."
+              },
+              {
+                "name": "continueUrl",
+                "value": "",
+                "type": "query",
+                "description": "URL-encoded target for the \"Go Back\" link on the Templates Buffet page (`ax=DesignBlast`).\nThe parameter name is case-sensitive and must be spelled `continueUrl`.\n"
+              },
+              {
+                "name": "tc",
+                "value": "",
+                "type": "query",
+                "description": "Tracking Code identifying where the link was clicked from. Sales carrying a tracking code\nappear in the partner's referral history.\n"
+              },
+              {
+                "name": "ic",
+                "value": "",
+                "type": "query",
+                "description": "Image Code identifying which image from the partner site was used. Purchased products\ncarrying an image code appear in the partner's royalty history.\n"
+              },
+              {
+                "name": "t_image1_iid",
+                "value": "",
+                "type": "query",
+                "description": "URL-encoded link to the image placed into the first template image object. Required when\nthe template declares an image object. Rename-aware: `t_<objectName>_iid`.\n"
+              },
+              {
+                "name": "t_image2_iid",
+                "value": "",
+                "type": "query",
+                "description": "URL-encoded link to the image placed into the second template image object."
+              },
+              {
+                "name": "t_text1_txt",
+                "value": "",
+                "type": "query",
+                "description": "Encoded text placed into the first template text object. Required when the template\ndeclares a text object. Rename-aware: `t_<objectName>_txt`.\n"
+              },
+              {
+                "name": "t_text2_txt",
+                "value": "",
+                "type": "query",
+                "description": "Encoded text placed into the second template text object."
+              },
+              {
+                "name": "t_text1_txtclr",
+                "value": "41690",
+                "type": "query",
+                "description": "Text color for the first template text object, as a 6-digit hex color code."
+              }
+            ]
+          },
+          "docs": "Generates a Zazzle product (or a \"Templates Buffet\" page of products) from a template,\nsubstituting the partner-supplied image URLs and text into the template objects.\n\nTemplate object parameters are dynamically named after the **URL Parameter Name** assigned to\neach template object in the Zazzle design tool. The default naming convention is `image1`,\n`image2`, `text1`, `text2`, … incrementing by one per object, producing\n`t_image1_iid`, `t_text1_txt`, `t_text1_txtclr`. If a template object was "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,225 @@
+openapi: 3.2.0
+info:
+  title: Zazzle Create-a-Product Create a Product API
+  version: '3.0'
+  summary: URL linkover API that injects images and text from a partner site into a Zazzle product template.
+  description: "The Zazzle Create-a-Product API is a URL \"linkover\" API. A partner builds a GET link that carries\ntheir Zazzle member account ID, a template product ID (or a store + category ID), and one\nparameter/value pair per template object (image or text). Zazzle renders a finished, purchasable\nproduct from the template using the supplied content.\n\nTwo modes are selected with the `ax` parameter:\n\n* `Linkover` — **1 to 1**. One link generates one product from one template (`pd`).\n* `DesignBlast` — **1 to Many** (\"Templates Buffet\"). One link generates many products from every\n  template in a store category (`sr` + `cg`).\n\nThere is no request body, no bearer token, and no JSON envelope — the whole contract is the query\nstring, and the response is the rendered Zazzle product page (HTML) that the end user lands on.\n\nPrerequisites documented by Zazzle: a Zazzle account, enrollment in the Associates Program,\nacceptance of the Create-a-Product API terms, and declaration of the domains the partner's image\nURLs will be served from.\n\n**Provenance.** This document was authored by API Evangelist from Zazzle's own published\n*Create-A-Product API User Guide & Documentation v3.0 (9/2019)* PDF. Every path, parameter, value\nconstraint, and required/optional flag below is transcribed from the parameter tables in that\nguide. Zazzle does not publish a machine-readable OpenAPI; nothing here is invented.\n"
+  contact:
+    name: Zazzle API Help Desk
+    email: api.help@zazzle.com
+    url: https://help.zazzle.com/hc/en-us/sections/360005063194-Create-A-Product-API
+  termsOfService: https://www.zazzle.com/terms/user_agreement
+servers:
+- url: https://www.zazzle.com
+  description: Zazzle US production
+- url: https://www.zazzle.co.uk
+  description: Zazzle UK production
+- url: https://www.zazzle.com.au
+  description: Zazzle Australia production
+tags:
+- name: Create a Product
+  description: Build a purchasable Zazzle product from a template plus partner-supplied images and text.
+paths:
+  /api/create/at-{accountId}:
+    get:
+      tags:
+      - Create a Product
+      operationId: createProductFromTemplate
+      summary: Create one or many Zazzle products from a template linkover
+      description: 'Generates a Zazzle product (or a "Templates Buffet" page of products) from a template,
+
+        substituting the partner-supplied image URLs and text into the template objects.
+
+
+        Template object parameters are dynamically named after the **URL Parameter Name** assigned to
+
+        each template object in the Zazzle design tool. The default naming convention is `image1`,
+
+        `image2`, `text1`, `text2`, … incrementing by one per object, producing
+
+        `t_image1_iid`, `t_text1_txt`, `t_text1_txtclr`. If a template object was renamed to `photo`,
+
+        the parameter becomes `t_photo_iid`.
+
+
+        All image URLs and text values must be URL-encoded.
+
+        '
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        description: Your Zazzle member account ID, carried in the path segment as `at-<accountId>`.
+        schema:
+          type: string
+          pattern: ^[0-9]{18}$
+        example: '238268965591408603'
+      - name: ax
+        in: query
+        required: true
+        description: 'Type of API request. `Linkover` generates a single product from a single template (`pd`
+
+          required). `DesignBlast` generates many products from a store category (`sr` and `cg`
+
+          required).
+
+          '
+        schema:
+          type: string
+          enum:
+          - Linkover
+          - DesignBlast
+      - name: rf
+        in: query
+        required: false
+        description: Your Zazzle Associate ID, used for referral attribution.
+        schema:
+          type: string
+          pattern: ^[0-9]{18}$
+      - name: pd
+        in: query
+        required: false
+        description: 'Template Product ID, taken from the tail of the template product URL. Required when
+
+          `ax=Linkover`.
+
+          '
+        schema:
+          type: string
+          pattern: ^[0-9]{18}$
+        example: '168619482839304922'
+      - name: sr
+        in: query
+        required: false
+        description: 'Store ID where the template products reside. Required when `ax=DesignBlast`. Zazzle
+
+          documents this value as obtainable only through the link building tool.
+
+          '
+        schema:
+          type: string
+          pattern: ^[0-9]{18}$
+      - name: cg
+        in: query
+        required: false
+        description: 'Store category ID holding the templates. Required when `ax=DesignBlast`. The default
+
+          "New Products" category cannot be used.
+
+          '
+        schema:
+          type: string
+          pattern: ^[0-9]{18}$
+      - name: ed
+        in: query
+        required: false
+        description: Whether the customer may further personalize the generated product on Zazzle.
+        schema:
+          type: boolean
+      - name: continueUrl
+        in: query
+        required: false
+        description: 'URL-encoded target for the "Go Back" link on the Templates Buffet page (`ax=DesignBlast`).
+
+          The parameter name is case-sensitive and must be spelled `continueUrl`.
+
+          '
+        schema:
+          type: string
+          format: uri
+      - name: tc
+        in: query
+        required: false
+        description: 'Tracking Code identifying where the link was clicked from. Sales carrying a tracking code
+
+          appear in the partner''s referral history.
+
+          '
+        schema:
+          type: string
+          maxLength: 100
+          pattern: ^[A-Za-z0-9_]{1,100}$
+      - name: ic
+        in: query
+        required: false
+        description: 'Image Code identifying which image from the partner site was used. Purchased products
+
+          carrying an image code appear in the partner''s royalty history.
+
+          '
+        schema:
+          type: string
+          maxLength: 100
+          pattern: ^[A-Za-z0-9_]{1,100}$
+      - name: t_image1_iid
+        in: query
+        required: false
+        description: 'URL-encoded link to the image placed into the first template image object. Required when
+
+          the template declares an image object. Rename-aware: `t_<objectName>_iid`.
+
+          '
+        schema:
+          type: string
+      - name: t_image2_iid
+        in: query
+        required: false
+        description: URL-encoded link to the image placed into the second template image object.
+        schema:
+          type: string
+      - name: t_text1_txt
+        in: query
+        required: false
+        description: 'Encoded text placed into the first template text object. Required when the template
+
+          declares a text object. Rename-aware: `t_<objectName>_txt`.
+
+          '
+        schema:
+          type: string
+      - name: t_text2_txt
+        in: query
+        required: false
+        description: Encoded text placed into the second template text object.
+        schema:
+          type: string
+      - name: t_text1_txtclr
+        in: query
+        required: false
+        description: Text color for the first template text object, as a 6-digit hex color code.
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{6}$
+        example: 4169e1
+      responses:
+        '200':
+          description: 'The rendered Zazzle product page (single product for `ax=Linkover`) or Templates Buffet
+
+            page (many products for `ax=DesignBlast`).
+
+            '
+          content:
+            text/html:
+              schema:
+                type: string
+        4XX:
+          description: 'Zazzle renders an in-page error rather than a structured error body. The guide documents
+
+            "Zazzle API Error: Image failed to upload" when the image host domain has not been
+
+            declared at https://www.zazzle.com/my/associate/domains or the image URL was not encoded.
+
+            '
+          content:
+            text/html:
+              schema:
+                type: string
+x-provenance:
+  method: generated
+  generated: '2026-08-05'
+  source: https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf
+  source_title: Zazzle Create-A-Product API User Guide & Documentation v3.0
+  source_http_status: 200
+  source_content_type: application/pdf
+  fetched: '2026-08-05'
+  note: Transcribed from the provider's published parameter tables. Zazzle publishes no OpenAPI; this is a faithful machine-readable rendering of the PDF, not a harvested provider artifact.

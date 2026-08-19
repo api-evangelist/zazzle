@@ -1,0 +1,352 @@
+{
+  "item": [
+    {
+      "id": "635ae5d1-07a9-4ea7-a29b-5197e833e7cf",
+      "name": "Create a Product",
+      "description": {
+        "content": "Build a purchasable Zazzle product from a template plus partner-supplied images and text.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8829dd99-1183-4650-8b22-7a1a60effc6d",
+          "name": "Create one or many Zazzle products from a template linkover",
+          "request": {
+            "name": "Create one or many Zazzle products from a template linkover",
+            "description": {
+              "content": "Generates a Zazzle product (or a \"Templates Buffet\" page of products) from a template,\nsubstituting the partner-supplied image URLs and text into the template objects.\n\nTemplate object parameters are dynamically named after the **URL Parameter Name** assigned to\neach template object in the Zazzle design tool. The default naming convention is `image1`,\n`image2`, `text1`, `text2`, … incrementing by one per object, producing\n`t_image1_iid`, `t_text1_txt`, `t_text1_txtclr`. If a template object was renamed to `photo`,\nthe parameter becomes `t_photo_iid`.\n\nAll image URLs and text values must be URL-encoded.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "create",
+                "at-{{accountId}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ax",
+                  "value": "<string>",
+                  "description": "(Required) Type of API request. `Linkover` generates a single product from a single template (`pd`\nrequired). `DesignBlast` generates many products from a store category (`sr` and `cg`\nrequired).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "rf",
+                  "value": "<string>",
+                  "description": "Your Zazzle Associate ID, used for referral attribution."
+                },
+                {
+                  "disabled": false,
+                  "key": "pd",
+                  "value": "<string>",
+                  "description": "Template Product ID, taken from the tail of the template product URL. Required when\n`ax=Linkover`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "sr",
+                  "value": "<string>",
+                  "description": "Store ID where the template products reside. Required when `ax=DesignBlast`. Zazzle\ndocuments this value as obtainable only through the link building tool.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "cg",
+                  "value": "<string>",
+                  "description": "Store category ID holding the templates. Required when `ax=DesignBlast`. The default\n\"New Products\" category cannot be used.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "ed",
+                  "value": "<boolean>",
+                  "description": "Whether the customer may further personalize the generated product on Zazzle."
+                },
+                {
+                  "disabled": false,
+                  "key": "continueUrl",
+                  "value": "<uri>",
+                  "description": "URL-encoded target for the \"Go Back\" link on the Templates Buffet page (`ax=DesignBlast`).\nThe parameter name is case-sensitive and must be spelled `continueUrl`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "tc",
+                  "value": "<string>",
+                  "description": "Tracking Code identifying where the link was clicked from. Sales carrying a tracking code\nappear in the partner's referral history.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "ic",
+                  "value": "<string>",
+                  "description": "Image Code identifying which image from the partner site was used. Purchased products\ncarrying an image code appear in the partner's royalty history.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "t_image1_iid",
+                  "value": "<string>",
+                  "description": "URL-encoded link to the image placed into the first template image object. Required when\nthe template declares an image object. Rename-aware: `t_<objectName>_iid`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "t_image2_iid",
+                  "value": "<string>",
+                  "description": "URL-encoded link to the image placed into the second template image object."
+                },
+                {
+                  "disabled": false,
+                  "key": "t_text1_txt",
+                  "value": "<string>",
+                  "description": "Encoded text placed into the first template text object. Required when the template\ndeclares a text object. Rename-aware: `t_<objectName>_txt`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "t_text2_txt",
+                  "value": "<string>",
+                  "description": "Encoded text placed into the second template text object."
+                },
+                {
+                  "disabled": false,
+                  "key": "t_text1_txtclr",
+                  "value": "<string>",
+                  "description": "Text color for the first template text object, as a 6-digit hex color code."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a11b21fd-2469-4747-aeb7-4cf776d6c5df",
+              "name": "The rendered Zazzle product page (single product for `ax=Linkover`) or Templates Buffet\npage (many products for `ax=DesignBlast`).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "create",
+                    "at-{{accountId}}"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ax",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rf",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pd",
+                      "value": "168619482839304922"
+                    },
+                    {
+                      "key": "sr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cg",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ed",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "continueUrl",
+                      "value": "<uri>"
+                    },
+                    {
+                      "key": "tc",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ic",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_image1_iid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_image2_iid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text1_txt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text2_txt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text1_txtclr",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "68ccc49e-a447-4eb2-9735-158ecac9b528",
+              "name": "Zazzle renders an in-page error rather than a structured error body. The guide documents\n\"Zazzle API Error: Image failed to upload\" when the image host domain has not been\ndeclared at https://www.zazzle.com/my/associate/domains or the image URL was not encoded.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "create",
+                    "at-{{accountId}}"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ax",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "rf",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pd",
+                      "value": "168619482839304922"
+                    },
+                    {
+                      "key": "sr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cg",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ed",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "continueUrl",
+                      "value": "<uri>"
+                    },
+                    {
+                      "key": "tc",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ic",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_image1_iid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_image2_iid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text1_txt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text2_txt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "t_text1_txtclr",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.zazzle.com",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) Your Zazzle member account ID, carried in the path segment as `at-<accountId>`.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<string>",
+      "key": "accountId"
+    }
+  ],
+  "info": {
+    "_postman_id": "192be00b-1e57-4e22-b6f7-b95774e1947d",
+    "name": "Zazzle Create-a-Product Create a Product API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Zazzle Create-a-Product API is a URL \"linkover\" API. A partner builds a GET link that carries\ntheir Zazzle member account ID, a template product ID (or a store + category ID), and one\nparameter/value pair per template object (image or text). Zazzle renders a finished, purchasable\nproduct from the template using the supplied content.\n\nTwo modes are selected with the `ax` parameter:\n\n* `Linkover` — **1 to 1**. One link generates one product from one template (`pd`).\n* `DesignBlast` — **1 to Many** (\"Templates Buffet\"). One link generates many products from every\n  template in a store category (`sr` + `cg`).\n\nThere is no request body, no bearer token, and no JSON envelope — the whole contract is the query\nstring, and the response is the rendered Zazzle product page (HTML) that the end user lands on.\n\nPrerequisites documented by Zazzle: a Zazzle account, enrollment in the Associates Program,\nacceptance of the Create-a-Product API terms, and declaration of the domains the partner's image\nURLs will be served from.\n\n**Provenance.** This document was authored by API Evangelist from Zazzle's own published\n*Create-A-Product API User Guide & Documentation v3.0 (9/2019)* PDF. Every path, parameter, value\nconstraint, and required/optional flag below is transcribed from the parameter tables in that\nguide. Zazzle does not publish a machine-readable OpenAPI; nothing here is invented.\n\n\nContact Support:\n Name: Zazzle API Help Desk\n Email: api.help@zazzle.com",
+      "type": "text/plain"
+    }
+  }
+}

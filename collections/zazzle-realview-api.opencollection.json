@@ -1,0 +1,79 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zazzle Product Image Real View API",
+    "version": "3.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "RealView",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Render a RealView product image for a template",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rlv.zazzle.com/svc/view",
+            "params": [
+              {
+                "name": "pid",
+                "value": "168619482839304922",
+                "type": "query",
+                "description": "Template Product ID, the 18-digit number at the end of the template product URL.\n"
+              },
+              {
+                "name": "max_dim",
+                "value": "512",
+                "type": "query",
+                "description": "Size in pixels of the returned (square) image. Values above 699 return an image with a\nZazzle-branded frame.\n"
+              },
+              {
+                "name": "at",
+                "value": "",
+                "type": "query",
+                "description": "Your Zazzle member account ID."
+              },
+              {
+                "name": "t_image1_url",
+                "value": "",
+                "type": "query",
+                "description": "URL-encoded link to the image placed into the first template image object. Required when\nthe template declares an image object. Note this is `_url`, not the Create-a-Product\n`_iid` suffix. Rename-aware: `t_<objectName>_url`.\n"
+              },
+              {
+                "name": "t_image2_url",
+                "value": "",
+                "type": "query",
+                "description": "URL-encoded link to the image placed into the second template image object."
+              },
+              {
+                "name": "t_text1_txt",
+                "value": "",
+                "type": "query",
+                "description": "Encoded text placed into the first template text object. Required when the template\ndeclares a text object.\n"
+              },
+              {
+                "name": "t_text2_txt",
+                "value": "",
+                "type": "query",
+                "description": "Encoded text placed into the second template text object."
+              },
+              {
+                "name": "t_text1_txtclr",
+                "value": "",
+                "type": "query",
+                "description": "Text color for the first template text object, as a 6-digit hex color code."
+              }
+            ]
+          },
+          "docs": "Returns a square product image of the given template with the supplied image and text\nsubstituted into its template objects. Template object parameters are named after the URL\nParameter Name assigned to each object in the Zazzle design tool, defaulting to `image1`,\n`text1`, … and incrementing per object.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

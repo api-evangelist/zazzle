@@ -13,6 +13,18 @@ description: >-
   files, and buy or void Zazzle-issued shipping labels. The Create-a-Product surface is monetized
   through the Zazzle Associates/Ambassador program, with partners setting their own royalty and
   earning a referral share on each sale.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://asset.zcache.com/assets/graphics/z5/global/zazzle_white.svg
 url: https://raw.githubusercontent.com/api-evangelist/zazzle/refs/heads/main/apis.yml
 x-type: company

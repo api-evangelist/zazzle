@@ -3,7 +3,7 @@ info:
   title: Zazzle Create-a-Product Create a Product API
   version: '3.0'
   summary: URL linkover API that injects images and text from a partner site into a Zazzle product template.
-  description: "The Zazzle Create-a-Product API is a URL \"linkover\" API. A partner builds a GET link that carries\ntheir Zazzle member account ID, a template product ID (or a store + category ID), and one\nparameter/value pair per template object (image or text). Zazzle renders a finished, purchasable\nproduct from the template using the supplied content.\n\nTwo modes are selected with the `ax` parameter:\n\n* `Linkover` — **1 to 1**. One link generates one product from one template (`pd`).\n* `DesignBlast` — **1 to Many** (\"Templates Buffet\"). One link generates many products from every\n  template in a store category (`sr` + `cg`).\n\nThere is no request body, no bearer token, and no JSON envelope — the whole contract is the query\nstring, and the response is the rendered Zazzle product page (HTML) that the end user lands on.\n\nPrerequisites documented by Zazzle: a Zazzle account, enrollment in the Associates Program,\nacceptance of the Create-a-Product API terms, and declaration of the domains the partner's image\nURLs will be served from.\n\n**Provenance.** This document was authored by API Evangelist from Zazzle's own published\n*Create-A-Product API User Guide & Documentation v3.0 (9/2019)* PDF. Every path, parameter, value\nconstraint, and required/optional flag below is transcribed from the parameter tables in that\nguide. Zazzle does not publish a machine-readable OpenAPI; nothing here is invented.\n"
+  description: The Zazzle Create-a-Product API is a URL "linkover" API.
   contact:
     name: Zazzle API Help Desk
     email: api.help@zazzle.com
@@ -42,9 +42,7 @@ paths:
         the parameter becomes `t_photo_iid`.
 
 
-        All image URLs and text values must be URL-encoded.
-
-        '
+        All image URLs and text values must be URL-encoded.'
       parameters:
       - name: accountId
         in: path

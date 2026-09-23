@@ -5,27 +5,7 @@ info:
   summary: Renders a dynamic product mockup image of a Zazzle template populated with partner content.
   description: 'Zazzle''s RealView(TM) image service returns a rendered product image for a Zazzle template with
 
-    partner-supplied images and text substituted into the template objects. It uses the same
-
-    parameter grammar as the Create-a-Product API, with two differences: the template is identified
-
-    by `pid` (not `pd`), and the image object parameter is `t_image1_url` (not `t_image1_iid`).
-
-
-    The response is an image, not a document — this endpoint is meant to be used directly as the
-
-    `src` of an `<img>` tag so a partner site can preview the finished product before linkover.
-
-
-    **Provenance.** Authored by API Evangelist from Zazzle''s published *Create-A-Product API User
-
-    Guide & Documentation v3.0 (9/2019)*, "Dynamic RealView Product Images" section. Every parameter,
-
-    value constraint, and required flag is transcribed from that guide''s parameter table. Zazzle
-
-    publishes no machine-readable OpenAPI.
-
-    '
+    partner-supplied images and text substituted into the template objects.'
   contact:
     name: Zazzle API Help Desk
     email: api.help@zazzle.com
@@ -50,9 +30,7 @@ paths:
 
         Parameter Name assigned to each object in the Zazzle design tool, defaulting to `image1`,
 
-        `text1`, … and incrementing per object.
-
-        '
+        `text1`, … and incrementing per object.'
       parameters:
       - name: pid
         in: query

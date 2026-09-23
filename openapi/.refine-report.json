@@ -1,9 +1,9 @@
 {
   "provider": "zazzle",
   "sources": [
-    "zazzle-create-a-product-api-openapi.yml",
-    "zazzle-realview-api-openapi.yml",
-    "zazzle-vendor-api-openapi.yml"
+    "_original/zazzle-create-a-product-openapi.yml",
+    "_original/zazzle-realview-openapi.yml",
+    "_original/zazzle-vendor-openapi.yml"
   ],
   "outputs": [
     "zazzle-create-a-product-api-openapi.yml",
@@ -14,10 +14,15 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "zazzle-create-a-product-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "zazzle-realview-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "zazzle-vendor-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sourced from openapi/_original/ (3 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "zazzle-create-a-product-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "zazzle-realview-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "zazzle-vendor-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "zazzle-create-a-product-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zazzle-realview-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zazzle-vendor-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

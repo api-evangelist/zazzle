@@ -183,6 +183,18 @@ paths:
                   value: "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Response>\n  <Status>\n    <Code>ERROR</Code>\n    <Info>Invalid parameter 'hash'. Is there an error in the parameter name?  Recheck and attempt again.  If problem persists contact maker.management@zazzle.com and reference Invalid_ Parameter_Name </Info>\n  </Status>\n</Response>\n"
 components:
   schemas:
+    VendorResponse:
+      type: object
+      description: Root `<Response>` element of every Vendor API reply.
+      properties:
+        Status:
+          $ref: '#/components/schemas/VendorStatus'
+        Result:
+          type: object
+          description: Method-specific payload, present on success. Zazzle does not publish the per-method shapes; they are intentionally left unconstrained rather than guessed.
+          additionalProperties: true
+      required:
+      - Status
     VendorStatus:
       type: object
       properties:
@@ -196,18 +208,6 @@ components:
           description: Human-readable status or error detail.
       required:
       - Code
-    VendorResponse:
-      type: object
-      description: Root `<Response>` element of every Vendor API reply.
-      properties:
-        Status:
-          $ref: '#/components/schemas/VendorStatus'
-        Result:
-          type: object
-          description: Method-specific payload, present on success. Zazzle does not publish the per-method shapes; they are intentionally left unconstrained rather than guessed.
-          additionalProperties: true
-      required:
-      - Status
   securitySchemes:
     vendorId:
       type: apiKey

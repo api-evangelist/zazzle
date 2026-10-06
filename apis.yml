@@ -46,7 +46,7 @@ x-type: company
 x-source: harvest:secondary-market
 specificationVersion: '0.23'
 created: '2026-08-05'
-modified: '2026-08-05'
+modified: '2026-10-06'
 tags:
 - Company
 - E-Commerce
@@ -146,6 +146,8 @@ apis:
   - type: Support
     url: mailto:maker.management@zazzle.com
 common:
+- url: https://www.zazzle.com/feed
+  type: BlogRSS
 - type: X-MCPServerCandidate
   url: mcp/zazzle-mcp.yml
   note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'

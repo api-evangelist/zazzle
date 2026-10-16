@@ -1,0 +1,14 @@
+{
+  "repo": "zazzle",
+  "feeds": [
+    {
+      "source": "https://www.zazzle.com/feed",
+      "feed_url": "https://www.zazzle.com/feed",
+      "title": "",
+      "saved": 55,
+      "method": "feed"
+    }
+  ],
+  "post_count": 55,
+  "fetched": "2026-10-10T13:15:00Z"
+}

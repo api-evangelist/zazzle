@@ -64,5 +64,125 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Zazzle is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/zazzle_stock/
+Zazzle is an online marketplace and on-demand manufacturing platform where independent designers, brands and shoppers create and buy customized physical products — invitations, cards, apparel, mugs, signage, business products and hundreds of other made-to-order goods. Zazzle exposes three distinct public integration surfaces rather than one general-purpose REST API: the Create-a-Product API, a URL "linkover" contract that injects a partner site's images and text into a Zazzle product template and returns a purchasable product (or a whole "Templates Buffet" of them); the RealView image service, which renders a dynamic product mockup of that same template for preview on the partner's own page; and the partner-gated Vendor (Maker) API, an XML RPC endpoint that Zazzle manufacturing partners use to pull new orders, acknowledge them, fetch packing sheets and print files, and buy or void Zazzle-issued shipping labels. The Create-a-Product surface is monetized through the Zazzle Associates/Ambassador program, with partners setting their own royalty and earning a referral share on each sale.
+
+**Areas:** Company · E-Commerce · Marketplace · Print on Demand · Manufacturing · Retail · Affiliates · Custom Products · Order Management · Shipping
+
+## Zazzle on APIs.io
+
+Everything profiled for Zazzle is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/zazzle/](https://apis.io/providers/zazzle/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [Zazzle Create a Product API](https://apis.io/apis/zazzle/zazzle-create-a-product-api/) — Build a purchasable Zazzle product from a template plus partner-supplied images and text.
+- [Zazzle Real View API](https://apis.io/apis/zazzle/zazzle-realview-api/) — Dynamic product mockup image rendering.
+- [Zazzle Vendor API](https://apis.io/apis/zazzle/zazzle-vendor-api/) — Maker order retrieval, acknowledgement, packing sheets and shipping labels.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [zazzle](https://apis.io/servers/zazzle/zazzle/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Zazzle Agentic Access](https://apis.io/agentic-access/zazzle/zazzle-agentic-access/)
+
+#### Collections (3)
+
+Postman and Open Collection request collections.
+
+- [Zazzle Create-a-Product Create a Product API](https://apis.io/collections/zazzle/open-zazzle-create-a-product-api/)
+- [Zazzle Product Image Real View API](https://apis.io/collections/zazzle/open-zazzle-realview-api/)
+- [Zazzle (Maker) API v100 Vendor API](https://apis.io/collections/zazzle/open-zazzle-vendor-api/)
+
+#### Overlays (3)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Zazzle Create A Product Overlay](https://apis.io/overlays/zazzle/zazzle-create-a-product-overlay/)
+- [Zazzle Realview Overlay](https://apis.io/overlays/zazzle/zazzle-realview-overlay/)
+- [Zazzle Vendor Overlay](https://apis.io/overlays/zazzle/zazzle-vendor-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Zazzle Authentication](https://apis.io/security/zazzle/zazzle-authentication/)
+- [Zazzle Domain Security](https://apis.io/security/zazzle/zazzle-domain-security/)
+- [Zazzle Vulnerability Disclosure](https://apis.io/security/zazzle/zazzle-vulnerability-disclosure/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.zazzle.com/)
+- [Documentation](https://www.zazzle.com/sell/developers)
+- [Getting started](https://help.zazzle.com/hc/en-us/sections/360005063194-Create-A-Product-API)
+- [API reference](https://asset.zcache.com/assets/graphics/z4/uniquePages/zAPI/ZazzleApiGuide.v3.pdf)
+- [Pricing](https://www.zazzle.com/sell/affiliates)
+- [Sign up](https://www.zazzle.com/lgn/registration)
+- [Support](https://www.zazzle.com/about/ask)
+- [Security](https://www.zazzle.com/.well-known/security.txt)
+- [Terms of service](https://www.zazzle.com/terms/user_agreement)
+- [Privacy policy](https://www.zazzle.com/terms/privacy_notice)
+- [GitHub](https://github.com/zazzle)
+
+## API Evangelist rating
+
+**Kin Score 27.2** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 71.4 |
+| Contract quality | 25.7 |
+| Contract governance | 4.5 |
+| Operational transparency | 13.2 |
+| Developer ergonomics | 44.6 |
+| Access clarity | 6.6 |
+
+**Agent readiness 30.2** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | na |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 22.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/zazzle/](https://apis.io/providers/zazzle/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Zazzle: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/zazzle/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
